@@ -5,36 +5,31 @@ import Base from "../../layouts/Base.astro";
 // your material and meant to be replaced with your own words.
 // x / y are % positions on the night canvas; dur/delay tune the drift.
 const strengths = [
-  { text: "Object-oriented UX",            x: 10, y: 8,  mx: 42, my: 5,  dur: 15, delay: 0 },
-  { text: "Terminology",                   x: 70, y: 6,  mx: 52, my: 10, dur: 18, delay: 1.5 },
-  { text: "Concept mapping",               x: 40, y: 12, mx: 45, my: 14, dur: 16, delay: 3 },
-  { text: "Vibe coding",                   x: 22, y: 18, mx: 35, my: 19, dur: 20, delay: 2 },
-  { text: "Vibe designing",                x: 60, y: 20, mx: 55, my: 23, dur: 17, delay: 4 },
-  { text: "AI content systems",            x: 8,  y: 26, mx: 42, my: 28, dur: 19, delay: 0.8 },
-  { text: "User Experience Design",        x: 44, y: 30, mx: 42, my: 32, dur: 21, delay: 3.6 },
-  { text: "Content Design",                x: 72, y: 32, mx: 48, my: 37, dur: 16, delay: 2.4 },
-  { text: "Writing",                       x: 26, y: 38, mx: 35, my: 41, dur: 18, delay: 5 },
-  { text: "Security enterprise products",  x: 6,  y: 44, mx: 42, my: 46, dur: 20, delay: 1.2 },
-  { text: "Product development",           x: 52, y: 46, mx: 42, my: 50, dur: 15, delay: 3.2 },
-  { text: "Responsible AI",                x: 74, y: 50, mx: 48, my: 55, dur: 18, delay: 0.4 },
-  { text: "Accessibility",                 x: 30, y: 54, mx: 52, my: 59, dur: 17, delay: 2.8 },
-  { text: "Critical thinking",             x: 58, y: 60, mx: 45, my: 64, dur: 19, delay: 4.4 },
-  { text: "User research",                 x: 10, y: 62, mx: 45, my: 68, dur: 16, delay: 1.8 },
-  { text: "Drawing",                       x: 76, y: 66, mx: 35, my: 73, dur: 21, delay: 3.8 },
-  { text: "Painting",                      x: 38, y: 70, mx: 55, my: 77, dur: 15, delay: 0.6 },
-  { text: "Poetry",                        x: 64, y: 76, mx: 35, my: 82, dur: 18, delay: 2.2 },
-  { text: "Singing",                       x: 20, y: 80, mx: 55, my: 86, dur: 20, delay: 4.8 },
-  { text: "Communications",                x: 48, y: 86, mx: 45, my: 91, dur: 17, delay: 1.4 },
-  { text: "Storytelling",                  x: 84, y: 14, mx: 35, my: 34, dur: 19, delay: 3.4 },
+  { text: "Object-oriented UX",            x: 12, y: 8,  mx: 44, my: 5,  dur: 15, delay: 0 },
+  { text: "Terminology",                   x: 60, y: 10, mx: 55, my: 10, dur: 18, delay: 1.5 },
+  { text: "Concept mapping",               x: 36, y: 15, mx: 45, my: 16, dur: 16, delay: 3 },
+  { text: "Vibe coding",                   x: 76, y: 18, mx: 35, my: 21, dur: 20, delay: 2 },
+  { text: "AI content systems",            x: 16, y: 24, mx: 44, my: 27, dur: 19, delay: 0.8 },
+  { text: "User Experience Design",        x: 46, y: 28, mx: 44, my: 32, dur: 21, delay: 3.6 },
+  { text: "Content Design",                x: 70, y: 32, mx: 48, my: 38, dur: 16, delay: 2.4 },
+  { text: "Writing",                       x: 26, y: 38, mx: 35, my: 43, dur: 18, delay: 5 },
+  { text: "Product development",           x: 56, y: 42, mx: 44, my: 49, dur: 15, delay: 3.2 },
+  { text: "Responsible AI",                x: 80, y: 47, mx: 48, my: 54, dur: 18, delay: 0.4 },
+  { text: "Accessibility",                 x: 14, y: 52, mx: 52, my: 60, dur: 17, delay: 2.8 },
+  { text: "Critical thinking",             x: 42, y: 57, mx: 45, my: 65, dur: 19, delay: 4.4 },
+  { text: "User research",                 x: 66, y: 62, mx: 45, my: 71, dur: 16, delay: 1.8 },
+  { text: "Art",                           x: 24, y: 68, mx: 35, my: 76, dur: 21, delay: 3.8 },
+  { text: "Music",                         x: 52, y: 73, mx: 55, my: 82, dur: 15, delay: 0.6 },
+  { text: "Communications",                x: 34, y: 80, mx: 45, my: 87, dur: 17, delay: 1.4 },
+  { text: "Storytelling",                  x: 72, y: 84, mx: 48, my: 93, dur: 19, delay: 3.4 },
 ];
 ---
 <Base bodyClass="dark">
-  <section class="skills-intro measure">
+  <section class="skills-intro">
     <p class="kicker">The skill tree</p>
     <h1>Strengths, as <span class="red">fireflies</span>.</h1>
     <p class="muted">
-      Each light carries something I bring. Hover or tab through them —
-      they'll glow. <span class="cursor" aria-hidden="true"></span>
+      Each light carries something I bring. Hover or tab through them and they'll glow. <span class="cursor" aria-hidden="true"></span>
     </p>
   </section>
 
