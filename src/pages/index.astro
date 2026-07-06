@@ -5,9 +5,9 @@ import Base from "../layouts/Base.astro";
   <section class="hero measure">
     <p class="kicker"><span class="ink">Content Designer</span> → Content Strategist</p>
     <h1>
-      I make products <span class="red">talk</span> the way people do.
+      I make products talk the way <span class="red">people</span> do.
     </h1>
-    <p class="subtitle">On a journey to expand content design from words to AI-forward systems.</p>
+    <p class="subtitle">On a journey to expand content design from words to <span class="nowrap">AI-forward</span> systems.</p>
     <p class="muted lede">
       I build the connective tissue of an experience — terminology, guidance, the
       relationships between concepts — for coherence and clarity across large product
@@ -36,9 +36,10 @@ import Base from "../layouts/Base.astro";
     .hero { margin-bottom: 4.5rem; }
     .hero h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); margin: 0.5rem 0 1.5rem; }
     .subtitle {
-      font-size: clamp(1.15rem, 2.6vw, 1.6rem); font-weight: 700;
-      color: var(--ink); margin: 0 0 1.2rem; line-height: 1.3;
+      font-size: clamp(1.15rem, 2.6vw, 1.6rem); font-weight: 400;
+      color: var(--ink); margin: 0 0 1.2rem; line-height: 1.35;
     }
+    .subtitle .nowrap { white-space: nowrap; }
     .lede { font-size: 1.05rem; }
 
     .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink); border: 2px solid var(--ink); }
