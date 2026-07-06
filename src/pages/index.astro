@@ -31,6 +31,7 @@ import Base from "../layouts/Base.astro";
   </p>
 
   <style>
+    .hero.measure { max-width: 82ch; }
     .hero { margin-bottom: 4.5rem; }
     .hero h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); margin: 0.5rem 0 1.5rem; }
     .lede { font-size: 1.05rem; }
@@ -49,7 +50,7 @@ import Base from "../layouts/Base.astro";
 
     .skills-note {
       margin-top: 1.5rem; text-align: left;
-      color: var(--green);
+      color: var(--ink);
       font-size: 0.95rem;
     }
     .skills-note .fly {
