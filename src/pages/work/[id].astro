@@ -3,8 +3,10 @@ import Base from "../../layouts/Base.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
+  const hidden = ["agentic-security", "contextual-guidance-tool"];
   const projects = (await getCollection("projects"))
-    .filter((p) => !p.id.startsWith("_"));
+    .filter((p) => !p.id.startsWith("_"))
+    .filter((p) => !hidden.includes(p.id));
   return projects.map((p) => ({ params: { id: p.id }, props: { project: p } }));
 }
 

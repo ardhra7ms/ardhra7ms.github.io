@@ -20,7 +20,6 @@ const row = (entry, base) => ({
 // 1 — Case studies · "Where work takes me"
 const caseStudies = pick(projects, [
   "dsi",
-  "agentic-security",
   "ediscovery",
   "ather-careers",
   "neur-xr",
@@ -28,7 +27,7 @@ const caseStudies = pick(projects, [
 
 // 2 — Side quests · "Where work meets passion"
 const sideMain = [
-  ...pick(projects, ["contextual-guidance-tool", "harms-overreliance"]).map((e) => row(e, "/work")),
+  ...pick(projects, ["harms-overreliance"]).map((e) => row(e, "/work")),
   ...pick(creative, ["continuum-xr"]).map((e) => row(e, "/projects")),
 ];
 const gradProjects = [
