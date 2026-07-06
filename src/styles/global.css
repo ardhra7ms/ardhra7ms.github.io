@@ -151,8 +151,11 @@ h1, h2, h3 { font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
 .colophon span:nth-child(2) { text-align: center; }
 .colophon span:last-child { text-align: right; }
 @media (max-width: 640px) {
-  .colophon { flex-direction: column; gap: 0.4rem; }
-  .colophon span, .colophon span:nth-child(2), .colophon span:last-child { text-align: left; }
+  .colophon { display: block; }
+  .colophon span,
+  .colophon span:nth-child(2),
+  .colophon span:last-child { display: inline; text-align: left; min-width: 0; }
+  .colophon span + span::before { content: " "; }
 }
 .foot-links { display: inline-flex; gap: 0.9rem; align-items: center; }
 .foot-links a { color: var(--green); display: inline-flex; transition: transform 0.15s ease, opacity 0.15s ease; opacity: 0.85; }

@@ -17,12 +17,10 @@ import Base from "../layouts/Base.astro";
 
   <section class="paths">
     <a class="path" href="/story">
-      <span class="path-no">01</span>
       <span class="path-title">My story</span>
       <span class="path-sub">A magazine, not a résumé. Get to know me — in my own words.</span>
     </a>
     <a class="path" href="/work">
-      <span class="path-no">02</span>
       <span class="path-title">The work</span>
       <span class="path-sub">Case studies. Approach, craft, and outcomes.</span>
     </a>
@@ -39,8 +37,7 @@ import Base from "../layouts/Base.astro";
       display: flex; flex-direction: column; gap: 0.4rem; min-height: 150px;
     }
     .path:hover { background: var(--ink); color: var(--paper); }
-    .path:hover .path-no, .path:hover .path-sub { color: var(--paper); }
-    .path-no { color: var(--red); font-size: 0.8rem; letter-spacing: 0.1em; }
+    .path:hover .path-sub { color: var(--paper); }
     .path-title { font-size: 1.4rem; font-weight: 700; }
     .path-sub { color: var(--grey-600); font-size: 0.9rem; margin-top: auto; }
 
