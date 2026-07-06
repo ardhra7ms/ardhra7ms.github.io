@@ -1,0 +1,90 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = (await getCollection("projects"))
+    .filter((p) => !p.id.startsWith("_"));
+  return projects.map((p) => ({ params: { id: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const tags = project.data.tags?.length ? project.data.tags : (project.data.category ? [project.data.category] : []);
+---
+<Base bg title={`${project.data.title || project.id} — Ardhra Sivasankaran`}>
+  <article class="study">
+    <p><a href="/work">← work</a></p>
+    {tags.length > 0 && <ul class="tags">{tags.map((t) => <li class="tag">{t}</li>)}</ul>}
+    <h1>{project.data.title || project.id}</h1>
+
+    {project.data.draft ? (
+      <p class="coming-soon">This case study is being written. Check back soon.</p>
+    ) : (
+    <>
+    {typeof project.data.metric === "number" && (
+      <div
+        class="stat"
+        data-metric={project.data.metric}
+        data-prefix={project.data.metricPrefix}
+        data-suffix={project.data.metricSuffix}
+      >
+        <span class="stat-num" aria-hidden="true">{project.data.metricPrefix}0{project.data.metricSuffix}</span>
+        <span class="stat-label">{project.data.metricLabel}</span>
+        <span class="sr-only">{project.data.metricPrefix}{project.data.metric}{project.data.metricSuffix} — {project.data.metricLabel}</span>
+      </div>
+    )}
+
+    <div class="prose">
+      <Content />
+    </div>
+    </>
+    )}
+  </article>
+
+  <style>
+    h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 0.4rem 0 1.6rem; }
+    .coming-soon { color: var(--grey-400); font-size: 1.05rem; font-style: italic; margin: 1rem 0 3rem; }
+    .prose :global(h2) { font-size: 1.2rem; margin: 2rem 0 0.6rem; }
+    .prose :global(p) { margin: 0 0 1.1rem; }
+    .prose :global(a) { color: var(--red); border-color: var(--red); }
+
+    /* count-up outcome stat (demo on one case study) */
+    .stat {
+      display: flex; flex-direction: column; gap: 0.3rem;
+      margin: 0 0 2rem; padding: 1.1rem 1.3rem;
+      border-left: 3px solid var(--red); background: var(--red-soft);
+    }
+    .stat-num { font-size: clamp(2.2rem, 7vw, 3.4rem); font-weight: 700; line-height: 1; color: var(--red); }
+    .stat-label { font-size: 0.85rem; color: var(--grey-600); }
+  </style>
+
+  <script>
+    const el = document.querySelector<HTMLElement>(".stat");
+    if (el) {
+      const num = el.querySelector<HTMLElement>(".stat-num")!;
+      const target = Number(el.dataset.metric || 0);
+      const prefix = el.dataset.prefix || "";
+      const suffix = el.dataset.suffix || "";
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const run = () => {
+        if (reduce) { num.textContent = `${prefix}${target}${suffix}`; return; }
+        const dur = 1100;
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          num.textContent = `${prefix}${Math.round(eased * target)}${suffix}`;
+          if (t < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((e) => { if (e.isIntersecting) { run(); obs.disconnect(); } });
+      }, { threshold: 0.6 });
+      io.observe(el);
+    }
+  </script>
+</Base>

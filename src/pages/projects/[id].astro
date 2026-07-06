@@ -1,0 +1,113 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const items = (await getCollection("creative")).filter((p) => !p.id.startsWith("_"));
+  return items.map((p) => ({ params: { id: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const tags = project.data.tags?.length ? project.data.tags : (project.data.kind ? [project.data.kind] : []);
+---
+<Base bg title={`${project.data.title || project.id} — Ardhra Sivasankaran`}>
+  <article class="study">
+    <p><a href="/projects">← projects</a></p>
+    {tags.length > 0 && <ul class="tags">{tags.map((t) => <li class="tag">{t}</li>)}</ul>}
+    <h1>{project.data.title || project.id}</h1>
+    {project.data.draft ? (
+      <p class="coming-soon">This project is being written. Check back soon.</p>
+    ) : (
+    <div class="prose">
+      <Content />
+
+      {project.data.pdf && (
+        <div class="pdfbook" data-pdf={project.data.pdf} oncontextmenu="return false">
+          <div class="pdfbook-stage">
+            <span class="pdfbook-loading">Loading the book…</span>
+            <canvas hidden></canvas>
+          </div>
+          <div class="pdfbook-bar">
+            <button class="pdfbook-nav" data-dir="prev" aria-label="Previous page" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 4 6 12l10 8z"/></svg>
+            </button>
+            <span class="pdfbook-count" aria-live="polite">— / —</span>
+            <button class="pdfbook-nav" data-dir="next" aria-label="Next page">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4l10 8-10 8z"/></svg>
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+    )}
+  </article>
+
+  <script is:inline type="module">
+    const book = document.querySelector(".pdfbook");
+    if (book) {
+      const pdfjs = await import("https://cdn.jsdelivr.net/npm/pdfjs-dist@4.7.76/build/pdf.min.mjs");
+      pdfjs.GlobalWorkerOptions.workerSrc =
+        "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.7.76/build/pdf.worker.min.mjs";
+
+      const canvas = book.querySelector("canvas");
+      const loading = book.querySelector(".pdfbook-loading");
+      const count = book.querySelector(".pdfbook-count");
+      const prevBtn = book.querySelector('[data-dir="prev"]');
+      const nextBtn = book.querySelector('[data-dir="next"]');
+      const ctx = canvas.getContext("2d");
+
+      let pdf = null, page = 1, rendering = false;
+
+      const render = async (n) => {
+        if (!pdf || rendering) return;
+        rendering = true;
+        const pg = await pdf.getPage(n);
+        const stage = book.querySelector(".pdfbook-stage");
+        const avail = stage.clientWidth - 40;
+        const base = pg.getViewport({ scale: 1 });
+        const scale = Math.min((avail / base.width) * (window.devicePixelRatio || 1), 3);
+        const vp = pg.getViewport({ scale });
+        canvas.width = vp.width; canvas.height = vp.height;
+        canvas.style.width = (vp.width / (window.devicePixelRatio || 1)) + "px";
+        await pg.render({ canvasContext: ctx, viewport: vp }).promise;
+        count.textContent = `${n} / ${pdf.numPages}`;
+        prevBtn.disabled = n <= 1;
+        nextBtn.disabled = n >= pdf.numPages;
+        rendering = false;
+      };
+
+      try {
+        pdf = await pdfjs.getDocument(book.dataset.pdf).promise;
+        loading.remove();
+        canvas.hidden = false;
+        await render(page);
+      } catch (e) {
+        loading.textContent = "Sorry — the book couldn't load.";
+      }
+
+      const go = (d) => { const t = page + d; if (t >= 1 && pdf && t <= pdf.numPages) { page = t; render(page); } };
+      prevBtn.addEventListener("click", () => go(-1));
+      nextBtn.addEventListener("click", () => go(1));
+      book.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") go(-1);
+        if (e.key === "ArrowRight") go(1);
+      });
+      book.tabIndex = 0;
+      let rt;
+      window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => render(page), 200); });
+    }
+  </script>
+
+  <style>
+    h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 0.4rem 0 1.6rem; }
+    .coming-soon { color: var(--grey-400); font-size: 1.05rem; font-style: italic; margin: 1rem 0 3rem; }
+    .prose :global(h2) { font-size: 1.2rem; margin: 2rem 0 0.6rem; }
+    .prose :global(p) { margin: 0 0 1.1rem; }
+    .prose :global(a) { color: var(--red); border-color: var(--red); }
+    .prose :global(blockquote) {
+      border-left: 3px solid var(--grey-200); margin: 1.4rem 0; padding: 0.2rem 0 0.2rem 1.2rem;
+      color: var(--grey-600);
+    }
+  </style>
+</Base>

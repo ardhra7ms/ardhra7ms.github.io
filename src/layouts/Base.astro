@@ -1,0 +1,50 @@
+---
+import "../styles/global.css";
+const { title = "Ardhra Sivasankaran", description = "Content designer & strategist — designing how products talk.", bodyClass = "", bg = false } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class={bg ? "wrap has-bg" : "wrap"}>
+      {bg && <div class="page-bg" aria-hidden="true"></div>}
+      <header class="site-head">
+        <a class="mark" href="/">ARDHRA<svg class="mark-flower" viewBox="0 0 24 24" aria-hidden="true"><circle class="petal" cx="12" cy="7" r="3.2"/><circle class="petal" cx="16.76" cy="10.45" r="3.2"/><circle class="petal" cx="14.94" cy="16.05" r="3.2"/><circle class="petal" cx="9.06" cy="16.05" r="3.2"/><circle class="petal" cx="7.24" cy="10.45" r="3.2"/><circle class="center" cx="12" cy="12" r="2.4"/></svg><svg class="mark-leaf" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05z"/></svg></a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="/story">story</a>
+          <a href="/work">work</a>
+          <a href="/skills">skills</a>
+        </nav>
+      </header>
+
+      <main id="main">
+        <slot />
+      </main>
+
+      <footer class="site-foot">
+        <div class="foot-row">
+          <span>© {new Date().getFullYear()} Ardhra Sivasankaran</span>
+          <nav class="foot-links" aria-label="Elsewhere">
+            <a class="foot-text" href="/files/resume.pdf" target="_blank" rel="noopener" aria-label="Résumé (PDF, opens in new tab)" title="Résumé">résumé</a>
+            <a class="foot-text" href="https://www.linkedin.com/in/ardhra-s" target="_blank" rel="noopener" aria-label="LinkedIn profile (opens in new tab)" title="LinkedIn">linkedin</a>
+          </nav>
+        </div>
+        <p class="colophon">
+          <span>The interactions on this site were built with AI under my direction.</span>
+          <span>Thanks to the many designers whose work has shaped it, wittingly or not.</span>
+          <span>Everything else here is drawn and written by me.</span>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

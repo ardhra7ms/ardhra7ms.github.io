@@ -1,0 +1,46 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const items = (await getCollection("creative"))
+  .filter((p) => !p.data.draft && !p.id.startsWith("_"))
+  .sort((a, b) => (b.data.date ?? "").localeCompare(a.data.date ?? ""));
+---
+<Base bg title="Projects — Ardhra Sivasankaran">
+  <section class="intro measure">
+    <p class="kicker">Projects</p>
+    <h1>Things I made to think with.</h1>
+    <p class="muted">
+      Creative and academic work — writing, brand, and XR experiments. Less "case study,"
+      more curiosity.
+    </p>
+  </section>
+
+  {items.length === 0 ? (
+    <p class="muted measure"><em>Projects are being added.</em></p>
+  ) : (
+    <ul class="list">
+      {items.map((p) => (
+        <li class="item">
+          <a href={`/projects/${p.id}`}>
+            <span class="t">{p.data.title || p.id}</span>
+            {p.data.kind && <span class="k">{p.data.kind}</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <style>
+    .intro { margin-bottom: 3rem; }
+    .intro h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 0.4rem 0 1rem; }
+    .list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--grey-200); }
+    .item a {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+      padding: 1.2rem 0; border: 0; border-bottom: 1px solid var(--grey-200);
+    }
+    .item a:hover { padding-left: 0.75rem; background: var(--red-soft); }
+    .t { font-size: 1.2rem; font-weight: 700; }
+    .k { color: var(--red); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: right; }
+  </style>
+</Base>

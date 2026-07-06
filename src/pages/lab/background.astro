@@ -1,0 +1,127 @@
+---
+import Base from "../../layouts/Base.astro";
+// Drawing reoriented to landscape, exact site red, yellow removed.
+// Full-bleed, scrolls with the page. Page height follows the CONTENT.
+---
+
+<Base title="Background lab — Ardhra">
+  <div class="lab">
+    <div class="controls">
+      <span class="controls-label">Landscape background</span>
+      <button data-len="short" class="is-active">Short content</button>
+      <button data-len="long">Long content</button>
+      <label class="opacity">Opacity
+        <input type="range" min="10" max="100" value="50" id="op" />
+      </label>
+    </div>
+
+    <div class="stage" data-len="short">
+      <div class="field" aria-hidden="true"></div>
+
+      <article class="reading">
+        <p class="kicker">Preview — real content, real width</p>
+        <h1>Landscape, full width, scrolls with the page</h1>
+        <p>
+          The drawing is now oriented to landscape, so it fills the screen width without
+          being zoomed in, and it scales with the screen size. It scrolls with the page,
+          and the page is only as tall as the content — not stretched for the artwork.
+        </p>
+        <p class="muted">Grey secondary line — we'll set opacity last.</p>
+        <p class="long-only">
+          Everyday, we visited historical sites and museums and had creative, reflective
+          themes to write and experiment with, ranging across history, art, mysticism,
+          religion, belief systems, cultures, cuisines, and more.
+        </p>
+        <p class="long-only">
+          More content to show a taller page. As you scroll, the background travels up
+          with the words. On a long page the whole drawing spans the full height, uncut.
+        </p>
+        <p class="long-only">
+          Even more, so you can see the scroll behaviour clearly on a long article and
+          confirm the background keeps pace with the reading.
+        </p>
+        <p class="long-only muted">A final quiet grey line, far down the page.</p>
+      </article>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .lab {
+    position: relative;
+    left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; width: 100vw;
+    margin-top: -3rem;   /* cancel .site-head's margin-bottom so the drawing sits flush under the nav */
+  }
+  .controls {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center;
+    padding: 0.7rem 1rem; background: #fff; border-bottom: 1px solid var(--grey-200);
+  }
+  .controls-label { font-size: 0.8rem; color: var(--grey-600); letter-spacing: 0.08em; text-transform: uppercase; }
+  .controls button {
+    font: inherit; font-size: 0.85rem; padding: 0.35rem 0.7rem; cursor: pointer;
+    background: #fff; border: 1px solid var(--grey-300); color: var(--ink); transition: all .15s;
+  }
+  .controls button:hover { border-color: var(--red); color: var(--red); }
+  .controls button.is-active { background: var(--red); color: #fff; border-color: var(--red); }
+  .opacity { font-size: 0.8rem; color: var(--grey-600); display: flex; align-items: center; gap: 0.4rem; margin-left: auto; }
+
+  /* Stage now spans the FULL content region (drawing flush top & bottom, no white bands).
+     Bleeds into the footer's margin so there's no gap below the artwork. */
+  .stage {
+    position: relative;
+    margin-bottom: -5rem;   /* cancel the footer's margin-top so the drawing runs to the footer line */
+    overflow: hidden;
+  }
+
+  /* single source of truth: the reading column width. The background is masked out
+     across exactly this column (+ a small feather), so NO artwork ever sits behind text. */
+  .stage { --readw: min(var(--measure), 100% - 3rem); --feather: 2.5rem; }
+
+  /* Landscape drawing: full width, natural aspect (no zoom, no stretch), scrolls with the page. */
+  .field {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("/files/bg/flowers-land.png");
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 100% auto;
+    opacity: var(--bg-op, 0.5); transition: opacity .2s;
+    /* clear band = the reading column, centred; works at every screen width */
+    -webkit-mask-image: linear-gradient(to right,
+      #000 calc(50% - var(--readw) / 2 - var(--feather)),
+      transparent calc(50% - var(--readw) / 2),
+      transparent calc(50% + var(--readw) / 2),
+      #000 calc(50% + var(--readw) / 2 + var(--feather)));
+    mask-image: linear-gradient(to right,
+      #000 calc(50% - var(--readw) / 2 - var(--feather)),
+      transparent calc(50% - var(--readw) / 2),
+      transparent calc(50% + var(--readw) / 2),
+      #000 calc(50% + var(--readw) / 2 + var(--feather)));
+  }
+
+  .reading { position: relative; z-index: 2; max-width: var(--readw); margin: 0 auto; padding: 1.5rem 1.5rem; }
+  .reading h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 0.3rem 0 1.2rem; }
+  .reading p { line-height: 1.7; margin: 0 0 1.1rem; }
+
+  .stage[data-len="short"] .long-only { display: none; }
+</style>
+
+<script is:inline>
+  const stage = document.querySelector(".stage");
+  const field = document.querySelector(".field");
+  const btns = document.querySelectorAll(".controls button");
+  const op = document.getElementById("op");
+  btns.forEach((b) =>
+    b.addEventListener("click", () => {
+      btns.forEach((x) => x.classList.remove("is-active"));
+      b.classList.add("is-active");
+      stage.setAttribute("data-len", b.dataset.len);
+    })
+  );
+  const setOp = () => field.style.setProperty("--bg-op", (op.value / 100).toString());
+  op.addEventListener("input", setOp);
+  setOp();
+  // allow ?len=long for quick preview/testing
+  const q = new URLSearchParams(location.search).get("len");
+  if (q === "long") { btns.forEach((x) => x.classList.remove("is-active")); document.querySelector('[data-len="long"]').classList.add("is-active"); stage.setAttribute("data-len", "long"); }
+</script>

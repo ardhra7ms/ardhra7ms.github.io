@@ -1,0 +1,49 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base bg>
+  <section class="hero measure">
+    <p class="kicker">Content Designer → Content Strategist</p>
+    <h1>
+      I design how products <span class="red">talk</span> —
+      the user's moment and the product's intent, at the same time.
+    </h1>
+    <p class="muted lede">
+      Writer–designer–engineer. I build the connective tissue of an experience —
+      terminology, guidance, the relationships between concepts — so meaning holds
+      across a whole product. Increasingly, that means designing how AI talks.<span class="cursor" aria-hidden="true"></span>
+    </p>
+  </section>
+
+  <section class="paths">
+    <a class="path" href="/story">
+      <span class="path-no">01</span>
+      <span class="path-title">My story</span>
+      <span class="path-sub">A magazine, not a résumé. Get to know me — in my own words.</span>
+    </a>
+    <a class="path" href="/work">
+      <span class="path-no">02</span>
+      <span class="path-title">The work</span>
+      <span class="path-sub">Case studies. Approach, craft, and outcomes.</span>
+    </a>
+  </section>
+
+  <style>
+    .hero { margin-bottom: 4.5rem; }
+    .hero h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); margin: 0.5rem 0 1.5rem; }
+    .lede { font-size: 1.05rem; }
+
+    .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink); border: 2px solid var(--ink); }
+    .path {
+      background: var(--paper); padding: 1.75rem 1.5rem; border: 0;
+      display: flex; flex-direction: column; gap: 0.4rem; min-height: 150px;
+    }
+    .path:hover { background: var(--ink); color: var(--paper); }
+    .path:hover .path-no, .path:hover .path-sub { color: var(--paper); }
+    .path-no { color: var(--red); font-size: 0.8rem; letter-spacing: 0.1em; }
+    .path-title { font-size: 1.4rem; font-weight: 700; }
+    .path-sub { color: var(--grey-600); font-size: 0.9rem; margin-top: auto; }
+
+    @media (max-width: 640px) { .paths { grid-template-columns: 1fr; } }
+  </style>
+</Base>

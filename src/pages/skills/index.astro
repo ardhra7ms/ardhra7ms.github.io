@@ -1,0 +1,145 @@
+---
+import Base from "../../layouts/Base.astro";
+
+// Fireflies carry strengths. Edit this list freely — these are seeded from
+// your material and meant to be replaced with your own words.
+// x / y are % positions on the night canvas; dur/delay tune the drift.
+const strengths = [
+  { text: "Content strategy",            x: 14, y: 22, dur: 15, delay: 0 },
+  { text: "Terminology & naming",        x: 68, y: 16, dur: 18, delay: 1.5 },
+  { text: "Voice & tone",                x: 40, y: 34, dur: 16, delay: 3 },
+  { text: "Systems thinking",            x: 80, y: 40, dur: 20, delay: 2 },
+  { text: "Cross-functional glue",       x: 22, y: 52, dur: 17, delay: 4 },
+  { text: "Storytelling",                x: 55, y: 58, dur: 19, delay: 0.8 },
+  { text: "Five languages",              x: 84, y: 66, dur: 21, delay: 3.6 },
+  { text: "Designing how AI talks",      x: 34, y: 72, dur: 16, delay: 2.4 },
+  { text: "Optimism",                    x: 62, y: 80, dur: 18, delay: 5 },
+  { text: "Inclusive, adaptive UX",      x: 12, y: 82, dur: 20, delay: 1.2 },
+];
+---
+<Base bodyClass="dark">
+  <section class="skills-intro measure">
+    <p class="kicker">The skill tree</p>
+    <h1>Strengths, as <span class="red">fireflies</span>.</h1>
+    <p class="muted">
+      Each light carries something I bring. Hover or tab through them —
+      they'll glow. <span class="cursor" aria-hidden="true"></span>
+    </p>
+  </section>
+
+  <section class="night" aria-labelledby="skills-heading">
+    <h2 id="skills-heading" class="sr-only">My strengths</h2>
+    <!-- Tree background drops in here later: add a .tree-layer image. -->
+    <div class="tree-layer" aria-hidden="true"></div>
+
+    <ul class="fireflies" aria-label="Strengths">
+      {strengths.map((s) => (
+        <li
+          class="firefly"
+          tabindex="0"
+          style={`--x:${s.x}%; --y:${s.y}%; --dur:${s.dur}s; --delay:${s.delay}s;`}
+        >
+          <span class="glow" aria-hidden="true"></span>
+          <span class="label">{s.text}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <style>
+    .skills-intro { margin-bottom: 2rem; }
+    .skills-intro h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); margin: 0.5rem 0 1rem; }
+
+    /* Full-bleed night canvas inside the centred wrap */
+    .night {
+      position: relative;
+      left: 50%; right: 50%;
+      margin-left: -50vw; margin-right: -50vw;
+      width: 100vw;
+      min-height: 68vh;
+      overflow: hidden;
+      background:
+        radial-gradient(120% 90% at 50% 10%, #16211a 0%, #0d130f 55%, #080b09 100%);
+      border-top: 1px solid #223027;
+      border-bottom: 1px solid #223027;
+    }
+
+    /* Placeholder for your hand-drawn tree — set a background-image here later */
+    .tree-layer {
+      position: absolute; inset: 0;
+      background: none;               /* e.g. url("/files/skill-tree.svg") center/contain no-repeat */
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .fireflies {
+      position: absolute; inset: 0;
+      list-style: none; margin: 0; padding: 0;
+    }
+
+    .firefly {
+      position: absolute;
+      left: var(--x); top: var(--y);
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      transform: translate(-50%, -50%);
+      cursor: default;
+      animation: drift var(--dur, 18s) ease-in-out var(--delay, 0s) infinite alternate;
+      outline: none;
+    }
+
+    .glow {
+      flex: 0 0 auto;
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--green-apple);
+      box-shadow: 0 0 6px 2px rgba(143, 203, 94, 0.55);
+      animation: pulse calc(var(--dur, 18s) / 4) ease-in-out infinite;
+    }
+
+    .label {
+      color: #d8e6cc;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      opacity: 0.55;
+      transition: opacity 0.25s ease, color 0.25s ease, text-shadow 0.25s ease;
+    }
+
+    .firefly:hover .glow,
+    .firefly:focus-visible .glow {
+      background: #c9f59a;
+      box-shadow: 0 0 14px 5px rgba(143, 203, 94, 0.85);
+    }
+    .firefly:hover .label,
+    .firefly:focus-visible .label {
+      opacity: 1;
+      color: #f0f8e8;
+      text-shadow: 0 0 10px rgba(143, 203, 94, 0.5);
+    }
+    .firefly:focus-visible {
+      outline: 2px solid var(--green-apple);
+      outline-offset: 6px;
+      border-radius: 4px;
+    }
+
+    @keyframes drift {
+      0%   { transform: translate(-50%, -50%); }
+      50%  { transform: translate(calc(-50% + 14px), calc(-50% - 12px)); }
+      100% { transform: translate(calc(-50% - 10px), calc(-50% + 10px)); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.45; }
+      50%      { opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .firefly { animation: none; }
+      .glow { animation: none; opacity: 1; }
+      .label { opacity: 1; }   /* all strengths readable when motion is off */
+    }
+
+    @media (max-width: 640px) {
+      .label { font-size: 0.82rem; }
+      .night { min-height: 78vh; }
+    }
+  </style>
+</Base>

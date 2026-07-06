@@ -1,0 +1,240 @@
+/* ───────────────────────────────────────────────
+   Ardhra — portfolio
+   Palette: black & white, vivid red accent.
+   Type: typewriter / monospace.
+   Edit these tokens to retune the whole site.
+─────────────────────────────────────────────── */
+:root {
+  --ink: #111111;
+  --paper: #fafafa;
+  --red: #e10600;        /* vivid red — use sparingly */
+  --red-deep: #9b0a00;   /* darker shade */
+  --red-soft: #ffeceb;   /* faint wash */
+  --green: #4f8a3d;      /* signal green */
+  --green-apple: #8fcb5e;/* lighter, appley */
+  --green-soft: #e7f3dc; /* faint green wash — menu highlight */
+  --grey-900: #1f1f1f;
+  --grey-600: #555555;
+  --grey-400: #8a8a8a;
+  --grey-200: #d8d8d8;
+  --grey-100: #ececec;
+
+  --font-mono: "Courier Prime", "Courier New", ui-monospace, monospace;
+  --measure: 68ch;       /* reading line length */
+  --wrap: 1040px;        /* max content width (shared by .wrap and the bg clear zone) */
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 17px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  cursor: url("/files/flower-cursor.svg") 13 13, auto;
+}
+
+a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--grey-200); }
+a:hover { color: var(--red); border-color: var(--red); }
+
+/* keyboard focus — visible for all interactive elements */
+a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--red); outline-offset: 2px; border-radius: 1px;
+}
+
+/* skip link — hidden until focused */
+.skip-link {
+  position: absolute; left: 0.75rem; top: -3rem;
+  background: var(--ink); color: var(--paper);
+  padding: 0.6rem 1rem; z-index: 100; border: 0;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0.75rem; }
+
+/* screen-reader-only: visually hidden, still announced */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+
+h1, h2, h3 { font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
+
+::selection { background: var(--red); color: #fff; }
+
+/* layout */
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 1.5rem; }
+.measure { max-width: var(--measure); }
+
+/* opt-in floral background: full-bleed layer that scrolls with the page.
+   The clear zone = the content wrap width (responsive: shrinks to the viewport on
+   small screens), so NO artwork ever sits behind content — flowers live in the gutters. */
+.wrap.has-bg { position: relative; }
+.has-bg > header, .has-bg > main, .has-bg > footer { position: relative; z-index: 1; }
+.page-bg {
+  position: absolute; top: 0; left: 50%; margin-left: -50vw; width: 100vw; height: 100%;
+  z-index: 0; pointer-events: none;
+  --clearw: min(var(--wrap), 100% - 3rem); --feather: 2.5rem;
+  background: url("/files/bg/flowers-land.png") top center / 100% auto repeat-y;
+  opacity: 0.62;
+  -webkit-mask-image: linear-gradient(to right,
+    #000 calc(50% - var(--clearw) / 2 - var(--feather)),
+    transparent calc(50% - var(--clearw) / 2),
+    transparent calc(50% + var(--clearw) / 2),
+    #000 calc(50% + var(--clearw) / 2 + var(--feather)));
+          mask-image: linear-gradient(to right,
+    #000 calc(50% - var(--clearw) / 2 - var(--feather)),
+    transparent calc(50% - var(--clearw) / 2),
+    transparent calc(50% + var(--clearw) / 2),
+    #000 calc(50% + var(--clearw) / 2 + var(--feather)));
+}
+
+/* site header */
+.site-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 1.5rem 0; border-bottom: 2px solid var(--ink);
+  margin-bottom: 3rem;
+}
+.site-head .mark { font-weight: 700; font-size: 1rem; letter-spacing: 0; border: 0; }
+.mark-flower { width: 0.8em; height: 0.8em; display: inline-block; vertical-align: middle; transform: translateY(-0.1em); margin-left: 0.06em; }
+.mark-leaf { width: 0.8em; height: 0.8em; display: none; vertical-align: middle; transform: translateY(-0.1em); margin-left: 0.06em; fill: var(--green); }
+.mark-flower .petal { fill: var(--red); }
+.mark-flower .center { fill: var(--paper); }
+.site-head .mark:hover { color: var(--red); }
+.site-head .mark:hover .mark-flower { display: none; }
+.site-head .mark:hover .mark-leaf { display: inline-block; }
+.site-nav a { margin-left: 1.25rem; font-size: 0.85rem; text-transform: lowercase; border: 0; }
+
+/* footer */
+.site-foot {
+  margin-top: 5rem; padding: 2rem 0 3rem; border-top: 1px solid var(--grey-200);
+  font-size: 0.8rem; color: var(--grey-600);
+  display: flex; flex-direction: column; gap: 1.1rem;
+}
+.foot-row {
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+}
+.colophon {
+  margin: 0.5rem 0 0; width: 100%; color: var(--grey-600); line-height: 1.6;
+  display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+}
+.colophon span { flex: 1 1 0; min-width: 200px; }
+.colophon span:nth-child(2) { text-align: center; }
+.colophon span:last-child { text-align: right; }
+@media (max-width: 640px) {
+  .colophon { flex-direction: column; gap: 0.4rem; }
+  .colophon span, .colophon span:nth-child(2), .colophon span:last-child { text-align: left; }
+}
+.foot-links { display: inline-flex; gap: 0.9rem; align-items: center; }
+.foot-links a { color: var(--red); display: inline-flex; transition: transform 0.15s ease, opacity 0.15s ease; opacity: 0.85; }
+.foot-links a:hover { transform: translateY(-2px); opacity: 1; }
+.foot-text { font-size: 0.8rem; text-decoration: none; }
+.foot-text:hover { text-decoration: underline; }
+
+/* utility */
+.red { color: var(--red); }
+.muted { color: var(--grey-600); }
+.kicker { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--red); }
+.cursor::after { content: "_"; color: var(--red); animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ── Dark theme (opt-in per page via <body class="dark">) ── */
+body.dark {
+  background: #0d130f;
+  color: #e8f0e2;
+}
+body.dark a { color: #e8f0e2; border-color: #2c3a30; }
+body.dark a:hover { color: var(--red); border-color: var(--red); }
+body.dark .muted { color: #9db38f; }
+body.dark .site-head { border-bottom-color: #2c3a30; }
+body.dark .site-foot { border-top-color: #2c3a30; color: #9db38f; }
+body.dark .mark-flower .center { fill: #0d130f; }
+
+/* respect reduced-motion: stop the blink and footer-link lift */
+@media (prefers-reduced-motion: reduce) {
+  .cursor::after { animation: none; }
+  .foot-links a { transition: none; }
+  .foot-links a:hover { transform: none; }
+}
+
+/* small screens: tighten gutters and stack the footer */
+@media (max-width: 560px) {
+  .wrap { padding: 0 1rem; }
+  .site-foot { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+}
+
+/* Responsive Canva / video embeds */
+.embed-canva {
+  position: relative;
+  width: 100%;
+  padding-top: 75%; /* ~4:3 book; adjust if your design is wider/taller */
+  margin: 1.4rem 0;
+  border: 1px solid var(--grey-200);
+  background: var(--grey-100);
+  overflow: hidden;
+}
+.embed-canva iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}
+
+/* Native PDF embed — preserves full image quality, ships with the site */
+.embed-pdf {
+  width: 100%;
+  height: 80vh;
+  min-height: 480px;
+  margin: 1.4rem 0;
+  border: 1px solid var(--grey-200);
+  background: var(--grey-100);
+}
+.embed-pdf iframe {
+  width: 100%; height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* ── Wider layout for case studies & project pages ── */
+.study { max-width: 100%; }
+
+/* ── Small green tags (reusable across pages) ── */
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 0.4rem; padding: 0; list-style: none; }
+.tag {
+  font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--green); border: 1px solid var(--green-apple);
+  padding: 0.12rem 0.5rem; border-radius: 999px; line-height: 1.6;
+}
+
+/* ── Custom PDF book viewer (frameless, no download) ── */
+.pdfbook { margin: 1.8rem 0; }
+.pdfbook-stage {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; min-height: 40vh;
+}
+.pdfbook-stage canvas {
+  max-width: 100%; height: auto;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.16);
+  background: #fff;
+}
+.pdfbook-loading { color: var(--grey-600); font-size: 0.85rem; }
+.pdfbook-bar {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.6rem; padding: 0.9rem 0 0.3rem;
+  font-size: 0.8rem; letter-spacing: 0.04em;
+}
+.pdfbook-nav {
+  background: none; border: 0; padding: 0.3rem 0.5rem;
+  display: inline-flex; align-items: center; cursor: url("/files/flower-cursor.svg") 13 13, pointer;
+  color: var(--ink);
+}
+.pdfbook-nav svg { width: 15px; height: 15px; fill: var(--red); transition: transform 0.12s ease; }
+.pdfbook-nav:hover:not(:disabled) svg { transform: scale(1.3); }
+.pdfbook-nav:disabled { opacity: 0.25; cursor: default; }
+.pdfbook-nav:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.pdfbook-count { font-variant-numeric: tabular-nums; color: var(--grey-600); }

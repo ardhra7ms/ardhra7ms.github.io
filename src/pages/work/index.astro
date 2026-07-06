@@ -1,0 +1,195 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+const creative = await getCollection("creative");
+
+// pull entries by id, preserving the given order
+const pick = (coll, ids) =>
+  ids.map((id) => coll.find((p) => p.id === id)).filter(Boolean);
+
+// normalise an entry into a menu row
+const row = (entry, base) => ({
+  href: `${base}/${entry.id}`,
+  title: entry.data.title || entry.id,
+  tag: entry.data.category || entry.data.kind || "",
+  ext: false,
+});
+
+// 1 — Case studies · "Where work takes me"
+const caseStudies = pick(projects, [
+  "dsi",
+  "agentic-security",
+  "ediscovery",
+  "ather-careers",
+  "neur-xr",
+]).map((e) => row(e, "/work"));
+
+// 2 — Side quests · "Where work meets passion"
+const sideMain = [
+  ...pick(projects, ["contextual-guidance-tool", "harms-overreliance"]).map((e) => row(e, "/work")),
+  ...pick(creative, ["continuum-xr"]).map((e) => row(e, "/projects")),
+];
+const gradProjects = [
+  ...pick(projects, ["nike-accessibility"]).map((e) => row(e, "/work")),
+  ...pick(creative, ["rome-brand"]).map((e) => row(e, "/projects")),
+];
+
+// 3 — For the love of it · "When inspiration finds me in daydreams (at night)"
+const writing = pick(creative, ["stumbling-upon-rome", "magazine-essay"]).map((e) =>
+  row(e, "/projects")
+);
+const talks = [
+  { title: "Ladies That UX — speaker panel on the career journey", href: "https://www.linkedin.com/feed/update/urn:li:activity:7395276655264653312/", tag: "talk", ext: true },
+  { title: "Screen Summit — design judge", href: "https://www.linkedin.com/feed/update/urn:li:activity:7467714616295526401/", tag: "judging", ext: true },
+  { title: "Talk (Instagram)", href: "https://www.instagram.com/p/CpELpU6JCpS/", tag: "talk", ext: true },
+  { title: "Talk (video)", href: "https://youtu.be/Xvr2fg2VcIA", tag: "talk", ext: true },
+  { title: "Search for True North", href: "https://www.linkedin.com/pulse/search-true-north-ardhra-s/", tag: "article", ext: true },
+  { title: "Year in Warp", href: "https://www.linkedin.com/pulse/year-warp-ardhra-s/", tag: "article", ext: true },
+  { title: "Making Software Intuitive Through Language", href: "https://www.linkedin.com/pulse/making-software-intuitive-through-language-microsoft-arihant-vaisraj-k4yzc/", tag: "article · co-authored", ext: true },
+  { title: "UW CommLead — profile", href: "https://commlead.uw.edu/2025/03/06/ardhra-sivasankaran/", tag: "feature", ext: true },
+];
+
+const sections = [
+  { title: "Case studies", desc: "Where work takes me", open: true, rows: caseStudies, groups: [] },
+  { title: "Curiosity quests", desc: "Where work meets passion", open: false, rows: sideMain, groups: [{ subhead: "Grad projects", rows: gradProjects }] },
+  { title: "For the love of it", desc: "When inspiration finds me in daydreams (at night)", open: false, rows: writing, groups: [{ subhead: "Talks & writing", rows: talks }] },
+];
+---
+<Base bg title="Work — Ardhra Sivasankaran">
+  <section class="work-intro">
+    <p class="kicker">The work</p>
+    <h1>What I've made<span class="cursor" aria-hidden="true"></span></h1>
+    <p class="muted lede">
+      Open a drawer. Much of my work is under confidentiality — so these lead with
+      method and thinking, not screens.
+    </p>
+  </section>
+
+  <div class="menu">
+    {sections.map((s) => (
+      <details class="drawer" open={s.open}>
+        <summary>
+          <span class="glyph" aria-hidden="true"><svg class="leaf" viewBox="0 0 24 24"><path d="M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05z"/></svg><svg class="flower" viewBox="0 0 24 24"><circle class="petal" cx="12" cy="7" r="3.2"/><circle class="petal" cx="16.76" cy="10.45" r="3.2"/><circle class="petal" cx="14.94" cy="16.05" r="3.2"/><circle class="petal" cx="9.06" cy="16.05" r="3.2"/><circle class="petal" cx="7.24" cy="10.45" r="3.2"/><circle class="center" cx="12" cy="12" r="2.4"/></svg></span>
+          <span class="label">{s.title}</span>
+          <span class="arrow" aria-hidden="true">▸</span>
+        </summary>
+        <p class="desc">{s.desc}</p>
+        <ul class="rows">
+          {s.rows.map((r) => (
+            <li>
+              <a href={r.href} target={r.ext ? "_blank" : undefined} rel={r.ext ? "noopener" : undefined}>
+                <span class="row-title">{r.title}{r.ext && <span class="ext" aria-hidden="true"> ↗</span>}</span>
+                {r.tag && <span class="leader" aria-hidden="true"></span>}
+                {r.tag && <span class="row-tag">{r.tag}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+        {s.groups.map((g) => (
+          <>
+            <p class="subhead">{g.subhead}</p>
+            <ul class="rows">
+              {g.rows.map((r) => (
+                <li>
+                  <a href={r.href} target={r.ext ? "_blank" : undefined} rel={r.ext ? "noopener" : undefined}>
+                    <span class="row-title">{r.title}{r.ext && <span class="ext" aria-hidden="true"> ↗</span>}</span>
+                    {r.tag && <span class="leader" aria-hidden="true"></span>}
+                    {r.tag && <span class="row-tag">{r.tag}</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))}
+      </details>
+    ))}
+  </div>
+
+  <style>
+    .work-intro { margin-bottom: 2.4rem; }
+    .work-intro h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 0.4rem 0 1rem; }
+    .lede { max-width: 60ch; }
+
+    .menu { max-width: 100%; }
+
+    .drawer {
+      border-top: 1px solid var(--ink);
+    }
+    .menu .drawer:last-child { border-bottom: 1px solid var(--ink); }
+
+    /* the clickable header row */
+    summary {
+      display: flex; align-items: center; gap: 0.85rem;
+      padding: 1.25rem 0.4rem 0.5rem;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary:hover { background: var(--green-soft); }
+
+    /* glyph: green leaf when closed → red flower when open */
+    .glyph {
+      width: 16px; height: 16px; flex: 0 0 auto;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .glyph svg { width: 16px; height: 16px; }
+    .glyph .leaf { fill: var(--green); }
+    .glyph .flower { display: none; }
+    .glyph .flower .petal { fill: var(--red); }
+    .glyph .flower .center { fill: var(--paper); }
+    .drawer[open] > summary .glyph .leaf { display: none; }
+    .drawer[open] > summary .glyph .flower { display: inline; }
+    .label { font-weight: 700; font-size: 1.25rem; flex: 1 1 auto; }
+    .arrow {
+      color: var(--red); font-size: 0.9rem;
+      transition: transform 0.18s ease;
+    }
+    .drawer[open] > summary .arrow { transform: rotate(90deg); }
+
+    .desc {
+      margin: 0.1rem 0 0.9rem 2.25rem;
+      color: var(--green);
+      font-style: italic;
+    }
+    .subhead {
+      margin: 1.4rem 0 0.4rem 2.25rem;
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em;
+      color: var(--grey-600);
+    }
+
+    .rows { list-style: none; padding: 0; margin: 0 0 1rem; }
+    .rows a {
+      display: flex; justify-content: flex-start; align-items: baseline; gap: 0.85rem;
+      padding: 0.8rem 0.4rem 0.8rem 2.25rem;
+      border: 0;
+      border-left: 3px solid transparent;
+      transition: padding-left .16s ease, background .16s ease, border-color .16s ease;
+    }
+    .rows a:hover {
+      background: var(--green-soft);
+      border-left-color: var(--green);
+      padding-left: 2.85rem;
+    }
+    .row-title { flex: 0 1 auto; font-size: 1.02rem; transition: color .16s ease; }
+    .rows a:hover .row-title { color: var(--red); }
+    .leader {
+      flex: 1 1 auto; align-self: center;
+      border-bottom: 1px dotted var(--grey-400);
+      min-width: 1.5rem; margin: 0 0.15rem;
+    }
+    .ext { color: var(--grey-400); font-size: 0.8rem; }
+    .row-tag {
+      flex: 0 0 auto;
+      color: var(--red); font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 0.14em;
+    }
+
+    @media (max-width: 480px) {
+      .desc, .subhead, .rows a { margin-left: 0; padding-left: 1.4rem; }
+    }
+  </style>
+</Base>
+

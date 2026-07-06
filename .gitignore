@@ -1,0 +1,35 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# ---- CONFIDENTIAL: never commit raw source / research / work documents ----
+# Research notes + extracted text from confidential Microsoft material
+src/data/_source/
+# Original documents dropped into the project root (resume, Connects, perspectives, decks, etc.)
+*.pdf
+*.pptx
+*.docx
+# ...but DO allow public assets meant to ship with the site
+!public/files/*.pdf
+
