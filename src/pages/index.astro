@@ -19,7 +19,7 @@ import Base from "../layouts/Base.astro";
   <section class="paths">
     <a class="path" href="/story">
       <span class="path-title">My st<span class="green">o</span>ry</span>
-      <span class="path-sub">Beliefs, philosophy, creative influences, and how I solve problems — the person behind the work.</span>
+      <span class="path-sub">The stories that shape me and how I make sense of the world.</span>
     </a>
     <a class="path" href="/work">
       <span class="path-title">The w<span class="green">o</span>rk</span>
@@ -32,12 +32,14 @@ import Base from "../layouts/Base.astro";
   </p>
 
   <style>
+    /* Two type sizes only: a headline size and a body size.
+       Hierarchy comes from weight and colour, not more sizes. */
     .hero.measure { max-width: 82ch; }
     .hero { margin-bottom: 4.5rem; }
-    .hero h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); margin: 0.5rem 0 1.5rem; }
+    .hero h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); margin: 0.5rem 0 1.25rem; line-height: 1.15; }
     .subtitle {
-      font-size: clamp(1.15rem, 2.6vw, 1.6rem); font-weight: 400;
-      color: var(--ink); margin: 0 0 1.2rem; line-height: 1.35;
+      font-size: 1.05rem; font-weight: 400;
+      color: var(--ink); margin: 0 0 1.25rem; line-height: 1.5;
     }
     .subtitle .nowrap { white-space: nowrap; }
     .lede { font-size: 1.05rem; }
@@ -45,19 +47,19 @@ import Base from "../layouts/Base.astro";
     .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink); border: 2px solid var(--ink); }
     .path {
       background: var(--paper); padding: 1.75rem 1.5rem; border: 0;
-      display: flex; flex-direction: column; gap: 0.4rem; min-height: 150px;
+      display: flex; flex-direction: column; gap: 0.4rem; min-height: 130px;
     }
     .path:hover { background: var(--ink); color: var(--paper); }
     .path:hover .path-sub { color: var(--paper); }
-    .path-title { font-size: 1.4rem; font-weight: 700; }
-    .path-sub { color: var(--grey-600); font-size: 0.9rem; margin-top: auto; }
+    .path-title { font-size: 1.05rem; font-weight: 700; }
+    .path-sub { color: var(--grey-600); font-size: 1.05rem; margin-top: auto; }
 
     @media (max-width: 640px) { .paths { grid-template-columns: 1fr; } }
 
     .skills-note {
       margin-top: 1.5rem; text-align: left;
       color: var(--ink);
-      font-size: 0.95rem;
+      font-size: 1.05rem;
     }
     .skills-note .fly {
       width: 1.05em; height: 1.05em; display: inline-block;
