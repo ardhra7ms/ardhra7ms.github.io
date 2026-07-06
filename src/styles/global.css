@@ -100,20 +100,20 @@ h1, h2, h3 { font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
    and footer chrome, kept fully clear of the main reading column. */
 @media (max-width: 640px) {
   .page-bg {
-    opacity: 0.5;
+    opacity: 0.8;
     -webkit-mask-image: linear-gradient(to bottom,
       #000 0,
-      #000 70px,
-      transparent 120px,
-      transparent calc(100% - 235px),
-      #000 calc(100% - 175px),
+      #000 84px,
+      transparent 122px,
+      transparent calc(100% - 250px),
+      #000 calc(100% - 170px),
       #000 100%);
             mask-image: linear-gradient(to bottom,
       #000 0,
-      #000 70px,
-      transparent 120px,
-      transparent calc(100% - 235px),
-      #000 calc(100% - 175px),
+      #000 84px,
+      transparent 122px,
+      transparent calc(100% - 250px),
+      #000 calc(100% - 170px),
       #000 100%);
   }
 }
