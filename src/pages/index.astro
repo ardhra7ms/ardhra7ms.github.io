@@ -5,20 +5,21 @@ import Base from "../layouts/Base.astro";
   <section class="hero measure">
     <p class="kicker"><span class="ink">Content Designer</span> → Content Strategist</p>
     <h1>
-      I design how products <span class="red">talk</span> —
-      the user's moment and the product's intent, at the same time.
+      I make products <span class="red">talk</span> the way people do.
     </h1>
+    <p class="subtitle">On a journey to expand content design from words to AI-forward systems.</p>
     <p class="muted lede">
-      Writer–designer–engineer. I build the connective tissue of an experience —
-      terminology, guidance, the relationships between concepts — so meaning holds
-      across a whole product. Increasingly, that means designing how AI talks.<span class="cursor" aria-hidden="true"></span>
+      I build the connective tissue of an experience — terminology, guidance, the
+      relationships between concepts — for coherence and clarity across large product
+      ecosystems. I'm a writer, artist, and lover of languages, trained in
+      communications, digital media, and engineering.<span class="cursor" aria-hidden="true"></span>
     </p>
   </section>
 
   <section class="paths">
     <a class="path" href="/story">
       <span class="path-title">My st<span class="green">o</span>ry</span>
-      <span class="path-sub">A magazine, not a résumé. Get to know me — in my own words.</span>
+      <span class="path-sub">Beliefs, philosophy, creative influences, and how I solve problems — the person behind the work.</span>
     </a>
     <a class="path" href="/work">
       <span class="path-title">The w<span class="green">o</span>rk</span>
@@ -34,6 +35,10 @@ import Base from "../layouts/Base.astro";
     .hero.measure { max-width: 82ch; }
     .hero { margin-bottom: 4.5rem; }
     .hero h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); margin: 0.5rem 0 1.5rem; }
+    .subtitle {
+      font-size: clamp(1.15rem, 2.6vw, 1.6rem); font-weight: 700;
+      color: var(--ink); margin: 0 0 1.2rem; line-height: 1.3;
+    }
     .lede { font-size: 1.05rem; }
 
     .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink); border: 2px solid var(--ink); }
