@@ -5,16 +5,16 @@ import Base from "../../layouts/Base.astro";
 // your material and meant to be replaced with your own words.
 // x / y are % positions on the night canvas; dur/delay tune the drift.
 const strengths = [
-  { text: "Content strategy",            x: 14, y: 22, dur: 15, delay: 0 },
-  { text: "Terminology & naming",        x: 68, y: 16, dur: 18, delay: 1.5 },
-  { text: "Voice & tone",                x: 40, y: 34, dur: 16, delay: 3 },
-  { text: "Systems thinking",            x: 80, y: 40, dur: 20, delay: 2 },
-  { text: "Cross-functional glue",       x: 22, y: 52, dur: 17, delay: 4 },
-  { text: "Storytelling",                x: 55, y: 58, dur: 19, delay: 0.8 },
-  { text: "Five languages",              x: 84, y: 66, dur: 21, delay: 3.6 },
-  { text: "Designing how AI talks",      x: 34, y: 72, dur: 16, delay: 2.4 },
-  { text: "Optimism",                    x: 62, y: 80, dur: 18, delay: 5 },
-  { text: "Inclusive, adaptive UX",      x: 12, y: 82, dur: 20, delay: 1.2 },
+  { text: "Content strategy",            x: 14, y: 22, mx: 30, my: 8,  dur: 15, delay: 0 },
+  { text: "Terminology & naming",        x: 68, y: 16, mx: 55, my: 15, dur: 18, delay: 1.5 },
+  { text: "Voice & tone",                x: 40, y: 34, mx: 32, my: 22, dur: 16, delay: 3 },
+  { text: "Systems thinking",            x: 80, y: 40, mx: 60, my: 29, dur: 20, delay: 2 },
+  { text: "Cross-functional glue",       x: 22, y: 52, mx: 35, my: 37, dur: 17, delay: 4 },
+  { text: "Storytelling",                x: 55, y: 58, mx: 62, my: 45, dur: 19, delay: 0.8 },
+  { text: "Five languages",              x: 84, y: 66, mx: 30, my: 53, dur: 21, delay: 3.6 },
+  { text: "Designing how AI talks",      x: 34, y: 72, mx: 55, my: 62, dur: 16, delay: 2.4 },
+  { text: "Optimism",                    x: 62, y: 80, mx: 40, my: 70, dur: 18, delay: 5 },
+  { text: "Inclusive, adaptive UX",      x: 12, y: 82, mx: 55, my: 80, dur: 20, delay: 1.2 },
 ];
 ---
 <Base bodyClass="dark">
@@ -37,7 +37,7 @@ const strengths = [
         <li
           class="firefly"
           tabindex="0"
-          style={`--x:${s.x}%; --y:${s.y}%; --dur:${s.dur}s; --delay:${s.delay}s;`}
+          style={`--x:${s.x}%; --y:${s.y}%; --mx:${s.mx}%; --my:${s.my}%; --dur:${s.dur}s; --delay:${s.delay}s;`}
         >
           <span class="glow" aria-hidden="true"></span>
           <span class="label">{s.text}</span>
@@ -139,7 +139,10 @@ const strengths = [
 
     @media (max-width: 640px) {
       .label { font-size: 0.82rem; }
-      .night { min-height: 78vh; }
+      .night { min-height: 82vh; }
+      /* Phone-tuned positions keep each firefly's whole label on-screen
+         (centre-anchored, so nothing clips off either edge). */
+      .firefly { left: var(--mx); top: var(--my); }
     }
   </style>
 </Base>
