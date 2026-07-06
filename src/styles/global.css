@@ -95,6 +95,29 @@ h1, h2, h3 { font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
     #000 calc(50% + var(--clearw) / 2 + var(--feather)));
 }
 
+/* Phones have no side gutters, so the horizontal clear-zone would hide every
+   flower. Switch to soft top & bottom bands that sit behind the sparse header
+   and footer chrome, kept fully clear of the main reading column. */
+@media (max-width: 640px) {
+  .page-bg {
+    opacity: 0.5;
+    -webkit-mask-image: linear-gradient(to bottom,
+      #000 0,
+      #000 70px,
+      transparent 120px,
+      transparent calc(100% - 235px),
+      #000 calc(100% - 175px),
+      #000 100%);
+            mask-image: linear-gradient(to bottom,
+      #000 0,
+      #000 70px,
+      transparent 120px,
+      transparent calc(100% - 235px),
+      #000 calc(100% - 175px),
+      #000 100%);
+  }
+}
+
 /* site header */
 .site-head {
   display: flex; justify-content: space-between; align-items: baseline;
