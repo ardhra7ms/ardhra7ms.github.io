@@ -155,7 +155,7 @@ h1, h2, h3 { font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
   .colophon span, .colophon span:nth-child(2), .colophon span:last-child { text-align: left; }
 }
 .foot-links { display: inline-flex; gap: 0.9rem; align-items: center; }
-.foot-links a { color: var(--red); display: inline-flex; transition: transform 0.15s ease, opacity 0.15s ease; opacity: 0.85; }
+.foot-links a { color: var(--green); display: inline-flex; transition: transform 0.15s ease, opacity 0.15s ease; opacity: 0.85; }
 .foot-links a:hover { transform: translateY(-2px); opacity: 1; }
 .foot-text { font-size: 0.8rem; text-decoration: none; }
 .foot-text:hover { text-decoration: underline; }
