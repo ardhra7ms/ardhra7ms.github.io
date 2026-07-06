@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 ---
 <Base bg>
   <section class="hero measure">
-    <p class="kicker">Content Designer → Content Strategist</p>
+    <p class="kicker">Content Designer → <span class="green">Content Strategist</span></p>
     <h1>
       I design how products <span class="red">talk</span> —
       the user's moment and the product's intent, at the same time.
@@ -17,14 +17,18 @@ import Base from "../layouts/Base.astro";
 
   <section class="paths">
     <a class="path" href="/story">
-      <span class="path-title">My story</span>
+      <span class="path-title">My st<span class="green">o</span>ry</span>
       <span class="path-sub">A magazine, not a résumé. Get to know me — in my own words.</span>
     </a>
     <a class="path" href="/work">
-      <span class="path-title">The work</span>
-      <span class="path-sub">Case studies. Approach, craft, and outcomes.</span>
+      <span class="path-title">The w<span class="green">o</span>rk</span>
+      <span class="path-sub">Where work takes me. Where work meets passion. When inspiration finds me in daydreams (at night).</span>
     </a>
   </section>
+
+  <p class="skills-note">
+    <svg class="fly" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="15" rx="3.2" ry="4.2"/><path d="M12 12C10 8 7 6 4 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M12 12C14 8 17 6 20 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>A person is a tree, and <a href="/skills">skills</a> fireflies.
+  </p>
 
   <style>
     .hero { margin-bottom: 4.5rem; }
@@ -42,5 +46,18 @@ import Base from "../layouts/Base.astro";
     .path-sub { color: var(--grey-600); font-size: 0.9rem; margin-top: auto; }
 
     @media (max-width: 640px) { .paths { grid-template-columns: 1fr; } }
+
+    .skills-note {
+      margin-top: 1.5rem; text-align: left;
+      color: var(--green); font-weight: 600; font-style: italic;
+      font-size: 0.95rem;
+    }
+    .skills-note .fly {
+      width: 1.05em; height: 1.05em; display: inline-block;
+      color: var(--ink); fill: var(--ink);
+      margin-right: 0.4em; vertical-align: -0.18em; font-style: normal;
+    }
+    .skills-note a { color: var(--green); text-decoration: underline; border: 0; }
+    .skills-note a:hover { color: var(--red); }
   </style>
 </Base>
