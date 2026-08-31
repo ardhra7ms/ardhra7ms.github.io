@@ -5,23 +5,23 @@ import Base from "../../layouts/Base.astro";
 // your material and meant to be replaced with your own words.
 // x / y are % positions on the night canvas; dur/delay tune the drift.
 const strengths = [
-  { text: "Object-oriented UX",            x: 12, y: 8,  mx: 44, my: 5,  dur: 15, delay: 0 },
-  { text: "Terminology",                   x: 60, y: 10, mx: 55, my: 10, dur: 18, delay: 1.5 },
-  { text: "Concept mapping",               x: 36, y: 15, mx: 45, my: 16, dur: 16, delay: 3 },
-  { text: "Vibe coding",                   x: 76, y: 18, mx: 35, my: 21, dur: 20, delay: 2 },
-  { text: "AI content systems",            x: 16, y: 24, mx: 44, my: 27, dur: 19, delay: 0.8 },
-  { text: "User Experience Design",        x: 46, y: 28, mx: 44, my: 32, dur: 21, delay: 3.6 },
-  { text: "Content Design",                x: 70, y: 32, mx: 48, my: 38, dur: 16, delay: 2.4 },
-  { text: "Writing",                       x: 26, y: 38, mx: 35, my: 43, dur: 18, delay: 5 },
-  { text: "Product development",           x: 56, y: 42, mx: 44, my: 49, dur: 15, delay: 3.2 },
-  { text: "Responsible AI",                x: 80, y: 47, mx: 48, my: 54, dur: 18, delay: 0.4 },
-  { text: "Accessibility",                 x: 14, y: 52, mx: 52, my: 60, dur: 17, delay: 2.8 },
-  { text: "Critical thinking",             x: 42, y: 57, mx: 45, my: 65, dur: 19, delay: 4.4 },
-  { text: "User research",                 x: 66, y: 62, mx: 45, my: 71, dur: 16, delay: 1.8 },
-  { text: "Art",                           x: 24, y: 68, mx: 35, my: 76, dur: 21, delay: 3.8 },
-  { text: "Music",                         x: 52, y: 73, mx: 55, my: 82, dur: 15, delay: 0.6 },
-  { text: "Communications",                x: 34, y: 80, mx: 45, my: 87, dur: 17, delay: 1.4 },
-  { text: "Storytelling",                  x: 72, y: 84, mx: 48, my: 93, dur: 19, delay: 3.4 },
+  { text: "Object-oriented UX",     x: 12, y: 8,  mx: 44, my: 5,  dur: 15, delay: 0,   blurb: "Designing content as a system of objects and relationships, not just isolated screens.", href: "/work/dsi" },
+  { text: "Terminology",            x: 60, y: 9,  mx: 55, my: 8,  dur: 18, delay: 1.5, blurb: "Building shared vocabularies so a product's core terms mean the same thing everywhere.", href: "/work/ediscovery" },
+  { text: "Concept mapping",        x: 36, y: 13, mx: 45, my: 12, dur: 16, delay: 3,   blurb: "Mapping how concepts relate, so meaning stays coherent across a whole experience.", href: "/work/dsi" },
+  { text: "Vibe coding",            x: 76, y: 15, mx: 35, my: 15, dur: 20, delay: 2,   blurb: "Prototyping and building with AI, turning rough ideas into working things fast.", href: "/work/neur-xr" },
+  { text: "AI content systems",     x: 16, y: 18, mx: 44, my: 18, dur: 19, delay: 0.8, blurb: "Designing how AI speaks, and the guardrails that keep it clear and honest.", href: "/work/harms-overreliance" },
+  { text: "User Experience Design", x: 46, y: 21, mx: 44, my: 21, dur: 21, delay: 3.6, blurb: "Shaping end-to-end flows so a product feels intuitive, human, and easy to move through.", href: "/work/ather-careers" },
+  { text: "Content Design",         x: 70, y: 24, mx: 48, my: 25, dur: 16, delay: 2.4, blurb: "Words, structure, and guidance that help people move through a product with ease.", href: "/work/ediscovery" },
+  { text: "Writing",                x: 26, y: 28, mx: 35, my: 28, dur: 18, delay: 5,   blurb: "Where my love of language began, from poetry to product.", href: "/projects/magazine-essay" },
+  { text: "Product development",    x: 56, y: 30, mx: 44, my: 31, dur: 15, delay: 3.2, blurb: "Partnering from envisioning to launch, owning the content end to end.", href: "/work/dsi" },
+  { text: "Responsible AI",         x: 80, y: 34, mx: 48, my: 34, dur: 18, delay: 0.4, blurb: "Messaging that keeps people oriented and reduces overreliance on AI.", href: "/work/harms-overreliance" },
+  { text: "Accessibility",          x: 14, y: 37, mx: 52, my: 38, dur: 17, delay: 2.8, blurb: "Auditing and designing so experiences work well for everyone.", href: "/work/nike-accessibility" },
+  { text: "Critical thinking",      x: 42, y: 40, mx: 45, my: 41, dur: 19, delay: 4.4, blurb: "Asking the hard questions to find the real problem beneath the ask.", href: "/work/dsi" },
+  { text: "User research",          x: 66, y: 44, mx: 45, my: 45, dur: 16, delay: 1.8, blurb: "Listening closely to understand how people think, work, and struggle.", href: "/work/neur-xr" },
+  { text: "Art",                    x: 24, y: 48, mx: 35, my: 48, dur: 21, delay: 3.8, blurb: "Drawing and painting, where I think with my hands and see differently.", href: "/projects/rome-brand" },
+  { text: "Music",                  x: 52, y: 51, mx: 55, my: 51, dur: 15, delay: 0.6, blurb: "A lifelong thread that tunes how I hear rhythm and voice.", href: "/story" },
+  { text: "Communications",         x: 34, y: 55, mx: 45, my: 54, dur: 17, delay: 1.4, blurb: "Trained across communications, digital media, and engineering, connecting people and ideas.", href: "/projects/stumbling-upon-rome" },
+  { text: "Storytelling",           x: 72, y: 58, mx: 48, my: 58, dur: 19, delay: 3.4, blurb: "Every good product, like every good essay, tells one coherent story.", href: "/projects/stumbling-upon-rome" },
 ];
 ---
 <Base bodyClass="dark">
@@ -35,18 +35,19 @@ const strengths = [
 
   <section class="night" aria-labelledby="skills-heading">
     <h2 id="skills-heading" class="sr-only">My strengths</h2>
-    <!-- Tree background drops in here later: add a .tree-layer image. -->
-    <div class="tree-layer" aria-hidden="true"></div>
-
     <ul class="fireflies" aria-label="Strengths">
       {strengths.map((s) => (
         <li
-          class="firefly"
+          class:list={["firefly", { "flip-x": s.x > 52, "flip-y": s.y > 66 }]}
           tabindex="0"
           style={`--x:${s.x}%; --y:${s.y}%; --mx:${s.mx}%; --my:${s.my}%; --dur:${s.dur}s; --delay:${s.delay}s;`}
         >
           <span class="glow" aria-hidden="true"></span>
           <span class="label">{s.text}</span>
+          <div class="card" role="group" aria-label={s.text}>
+            <p class="card-text">{s.blurb}</p>
+            <a class="card-link" href={s.href}>See it &rarr;</a>
+          </div>
         </li>
       ))}
     </ul>
@@ -62,20 +63,12 @@ const strengths = [
       left: 50%; right: 50%;
       margin-left: -50vw; margin-right: -50vw;
       width: 100vw;
-      min-height: 68vh;
+      min-height: 92vh;
       overflow: hidden;
       background:
         radial-gradient(120% 90% at 50% 10%, #16211a 0%, #0d130f 55%, #080b09 100%);
       border-top: 1px solid #223027;
       border-bottom: 1px solid #223027;
-    }
-
-    /* Placeholder for your hand-drawn tree — set a background-image here later */
-    .tree-layer {
-      position: absolute; inset: 0;
-      background: none;               /* e.g. url("/files/skill-tree.svg") center/contain no-repeat */
-      opacity: 0.9;
-      pointer-events: none;
     }
 
     .fireflies {
@@ -94,11 +87,35 @@ const strengths = [
     }
 
     .glow {
+      position: relative;
       flex: 0 0 auto;
       width: 9px; height: 9px; border-radius: 50%;
       background: var(--green-apple);
       box-shadow: 0 0 6px 2px rgba(143, 203, 94, 0.55);
       animation: pulse calc(var(--dur, 18s) / 4) ease-in-out infinite;
+    }
+
+    /* Two light-line wings — no fill; the glow supplies the light. */
+    .glow::before,
+    .glow::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 9px; height: 12px;
+      border: 1px solid rgba(201, 245, 154, 0.45);
+      border-radius: 50%;
+      background: transparent;
+      pointer-events: none;
+      transition: border-color 0.25s ease;
+    }
+    .glow::before { left: 50%; transform: translate(-95%, -55%) rotate(-24deg); }
+    .glow::after  { left: 50%; transform: translate(-5%, -55%) rotate(24deg); }
+
+    .firefly:hover .glow::before,
+    .firefly:focus-visible .glow::before,
+    .firefly:hover .glow::after,
+    .firefly:focus-visible .glow::after {
+      border-color: rgba(201, 245, 154, 0.85);
     }
 
     .label {
@@ -127,6 +144,55 @@ const strengths = [
       border-radius: 4px;
     }
 
+    /* Pop-up card — light green, dark text for contrast. */
+    .card {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: -4px;
+      width: 220px;
+      background: #cdefab;
+      color: #14210d;
+      border-radius: 10px;
+      padding: 0.7rem 0.85rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .card-text {
+      margin: 0 0 0.5rem;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+    .card-link {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #2f6a1e;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .card-link:hover,
+    .card-link:focus-visible { text-decoration: underline; }
+
+    /* Flip the card away from the canvas edges. */
+    .firefly.flip-x .card { left: auto; right: calc(100% - 14px); }
+    .firefly.flip-y .card { top: auto; bottom: calc(100% + 12px); transform: translateY(-4px); }
+
+    .firefly:hover,
+    .firefly:focus-within { z-index: 20; animation-play-state: paused; }
+
+    .firefly:hover .card,
+    .firefly:focus-within .card {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
     @keyframes drift {
       0%   { transform: translate(-50%, -50%); }
       50%  { transform: translate(calc(-50% + 14px), calc(-50% - 12px)); }
@@ -149,6 +215,9 @@ const strengths = [
       /* Phone-tuned positions keep each firefly's whole label on-screen
          (centre-anchored, so nothing clips off either edge). */
       .firefly { left: var(--mx); top: var(--my); }
+      /* Centre cards under the dot so they never overflow a narrow screen. */
+      .card,
+      .firefly.flip-x .card { left: 50%; right: auto; width: 200px; margin-left: -100px; }
     }
   </style>
 </Base>
