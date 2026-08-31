@@ -87,15 +87,17 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
   </section>
 
   <div class="filter-bar">
-    <label for="tag-filter">Filter by tag</label>
-    <div class="select-wrap">
-      <select id="tag-filter" aria-label="Filter projects by tag">
-        <option value="all">All projects</option>
-        {allTags.map((t) => <option value={t.toLowerCase()}>{t}</option>)}
-      </select>
-      <span class="chevron" aria-hidden="true">▾</span>
-    </div>
     <button type="button" id="filter-clear" class="filter-clear" hidden>Clear</button>
+    <div class="dropdown" id="tag-dropdown">
+      <button type="button" class="dd-toggle" id="dd-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter projects by tag">
+        <span class="dd-value" id="dd-value">All projects</span>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <ul class="dd-menu" id="dd-menu" role="listbox" hidden>
+        <li role="option" data-value="all" class="dd-option is-selected">All projects</li>
+        {allTags.map((t) => <li role="option" data-value={t.toLowerCase()} class="dd-option">{t}</li>)}
+      </ul>
+    </div>
   </div>
   <p class="no-results" id="no-results" hidden>No projects with that tag yet.</p>
 
@@ -221,29 +223,45 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     /* Filter bar */
     .filter-bar {
       display: flex; align-items: center; gap: 0.75rem;
-      flex-wrap: wrap;
+      flex-wrap: wrap; justify-content: flex-end;
       margin-bottom: 1.25rem;
     }
-    .filter-bar label {
-      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.16em;
-      color: var(--grey-600);
-    }
-    .select-wrap { position: relative; display: inline-flex; align-items: center; }
-    #tag-filter {
-      appearance: none; -webkit-appearance: none;
+
+    /* custom dropdown — styled to match the site, not the OS */
+    .dropdown { position: relative; }
+    .dd-toggle {
+      display: inline-flex; align-items: center; gap: 0.9rem;
       font: inherit; font-size: 0.95rem;
       color: var(--ink); background: var(--paper);
-      border: 1px solid var(--ink);
-      border-radius: 0;
-      padding: 0.5rem 2.2rem 0.5rem 0.75rem;
-      cursor: pointer;
-      min-width: 12rem;
+      border: 1px solid var(--ink); border-radius: 0;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer; min-width: 12rem;
+      justify-content: space-between;
     }
-    #tag-filter:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
-    .select-wrap .chevron {
-      position: absolute; right: 0.7rem; pointer-events: none;
+    .dd-toggle:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+    .dd-toggle .chevron {
       color: var(--red); font-size: 0.8rem;
+      transition: transform 0.18s ease;
     }
+    .dropdown.open .dd-toggle .chevron { transform: rotate(180deg); }
+
+    .dd-menu {
+      position: absolute; top: calc(100% - 1px); right: 0; z-index: 20;
+      list-style: none; margin: 0; padding: 0;
+      min-width: 100%;
+      background: var(--paper);
+      border: 1px solid var(--ink);
+      max-height: 60vh; overflow-y: auto;
+    }
+    .dd-option {
+      padding: 0.55rem 0.75rem;
+      font-size: 0.95rem; white-space: nowrap;
+      cursor: pointer;
+    }
+    .dd-option:hover { background: var(--green-soft); }
+    .dd-option.is-selected { color: var(--red); }
+    .dd-option.is-selected::after { content: " ✓"; }
+
     .filter-clear {
       font: inherit; font-size: 0.82rem;
       background: none; border: 0; color: var(--red);
@@ -257,16 +275,38 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     @media (max-width: 480px) {
       .desc, .subhead, .rows a { margin-left: 0; padding-left: 1.4rem; }
       .filter-bar { gap: 0.5rem 0.75rem; }
-      #tag-filter { min-width: 0; width: 100%; flex: 1 1 auto; }
-      .select-wrap { flex: 1 1 100%; }
+      .dropdown { flex: 1 1 100%; }
+      .dd-toggle { width: 100%; min-width: 0; }
+      .dd-menu { left: 0; right: 0; }
     }
   </style>
 
   <script>
-    const select = document.getElementById("tag-filter");
+    const dropdown = document.getElementById("tag-dropdown");
+    const toggle = document.getElementById("dd-toggle");
+    const menu = document.getElementById("dd-menu");
+    const valueLabel = document.getElementById("dd-value");
+    const options = Array.from(menu.querySelectorAll(".dd-option"));
     const clearBtn = document.getElementById("filter-clear");
     const noResults = document.getElementById("no-results");
     const drawers = Array.from(document.querySelectorAll(".menu .drawer"));
+
+    function openMenu() {
+      menu.hidden = false;
+      dropdown.classList.add("open");
+      toggle.setAttribute("aria-expanded", "true");
+    }
+    function closeMenu() {
+      menu.hidden = true;
+      dropdown.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    }
+
+    function select(value, label) {
+      options.forEach((o) => o.classList.toggle("is-selected", o.dataset.value === value));
+      valueLabel.textContent = label;
+      apply(value);
+    }
 
     function apply(tag) {
       const all = tag === "all";
@@ -275,7 +315,6 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
       drawers.forEach((drawer) => {
         let drawerMatches = 0;
 
-        // group wrappers (subhead + list) and the top-level list
         drawer.querySelectorAll(".rows").forEach((ul) => {
           let listMatches = 0;
           ul.querySelectorAll("li[data-tags]").forEach((li) => {
@@ -284,7 +323,6 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
             li.hidden = !show;
             if (show) listMatches++;
           });
-          // hide an empty grouped list + its subhead
           const group = ul.closest(".group");
           if (group) group.hidden = !all && listMatches === 0;
           drawerMatches += listMatches;
@@ -305,11 +343,25 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
       clearBtn.hidden = all;
     }
 
-    select.addEventListener("change", (e) => apply(e.target.value));
+    toggle.addEventListener("click", () => {
+      dropdown.classList.contains("open") ? closeMenu() : openMenu();
+    });
+    options.forEach((o) => {
+      o.addEventListener("click", () => {
+        select(o.dataset.value, o.textContent.trim());
+        closeMenu();
+        toggle.focus();
+      });
+    });
+    document.addEventListener("click", (e) => {
+      if (!dropdown.contains(e.target)) closeMenu();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
     clearBtn.addEventListener("click", () => {
-      select.value = "all";
-      apply("all");
-      select.focus();
+      select("all", "All projects");
+      toggle.focus();
     });
   </script>
 </Base>
