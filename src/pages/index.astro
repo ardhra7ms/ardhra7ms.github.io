@@ -28,6 +28,12 @@ import Base from "../layouts/Base.astro";
     <svg class="fly" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="15" rx="3.2" ry="4.2"/><path d="M12 12C10 8 7 6 4 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M12 12C14 8 17 6 20 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>A person is a tree, and <a href="/skills">skills</a> fireflies.
   </p>
 
+  <style is:global>
+    /* Landing page only: constrain the shared column to the reading measure so the
+       masthead rule, hero, cards and footer all align to one edge. Other pages stay wide. */
+    :root { --wrap: 820px; }
+  </style>
+
   <style>
     /* Two type sizes only: a headline size and a body size.
        Hierarchy comes from weight and colour, not more sizes. */
