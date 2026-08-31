@@ -82,23 +82,24 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
 ---
 <Base bg title="Work — Ardhra Sivasankaran">
   <section class="work-intro">
-    <p class="kicker">The work</p>
-    <h1>What I've made<span class="cursor" aria-hidden="true"></span></h1>
-  </section>
-
-  <div class="filter-bar">
-    <div class="dropdown" id="tag-dropdown">
-      <button type="button" class="dd-toggle" id="dd-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter projects by tag">
-        <span class="dd-value" id="dd-value">All projects</span>
-        <span class="chevron" aria-hidden="true">▾</span>
-      </button>
-      <ul class="dd-menu" id="dd-menu" role="listbox" hidden>
-        <li role="option" data-value="all" class="dd-option is-selected">All projects</li>
-        {allTags.map((t) => <li role="option" data-value={t.toLowerCase()} class="dd-option">{t}</li>)}
-      </ul>
+    <div class="intro-head">
+      <p class="kicker">The work</p>
+      <h1>What I've made<span class="cursor" aria-hidden="true"></span></h1>
     </div>
-    <button type="button" id="filter-clear" class="filter-clear" hidden>Clear</button>
-  </div>
+    <div class="filter-bar">
+      <button type="button" id="filter-clear" class="filter-clear" hidden>Clear</button>
+      <div class="dropdown" id="tag-dropdown">
+        <button type="button" class="dd-toggle" id="dd-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter projects by tag">
+          <span class="dd-value" id="dd-value">All projects</span>
+          <span class="chevron" aria-hidden="true">▾</span>
+        </button>
+        <ul class="dd-menu" id="dd-menu" role="listbox" hidden>
+          <li role="option" data-value="all" class="dd-option is-selected">All projects</li>
+          {allTags.map((t) => <li role="option" data-value={t.toLowerCase()} class="dd-option">{t}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
   <p class="no-results" id="no-results" hidden>No projects with that tag yet.</p>
 
   <div class="menu">
@@ -220,11 +221,17 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
       text-transform: uppercase; letter-spacing: 0.14em;
     }
 
+    /* Heading row: title left, filter right on the same baseline */
+    .work-intro {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 1rem 1.5rem; flex-wrap: wrap;
+    }
+    .intro-head { flex: 1 1 auto; }
+
     /* Filter bar */
     .filter-bar {
       display: flex; align-items: center; gap: 0.75rem;
-      flex-wrap: wrap; justify-content: flex-start;
-      margin-bottom: 1.25rem;
+      flex: 0 0 auto;
     }
 
     /* custom dropdown — styled to match the site, not the OS */
@@ -246,17 +253,18 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     .dropdown.open .dd-toggle .chevron { transform: rotate(180deg); }
 
     .dd-menu {
-      position: absolute; top: calc(100% - 1px); left: 0; z-index: 20;
+      position: absolute; top: calc(100% - 1px); right: 0; z-index: 60;
       list-style: none; margin: 0; padding: 0;
       min-width: 100%;
       background: var(--paper);
       border: 1px solid var(--ink);
-      max-height: 60vh; overflow-y: auto;
+      box-shadow: 6px 6px 0 rgba(20, 33, 13, 0.12);
+      max-height: 22rem; overflow-y: auto;
     }
     .dd-option {
       padding: 0.55rem 0.75rem;
       font-size: 0.95rem; white-space: nowrap;
-      cursor: pointer;
+      cursor: pointer; background: var(--paper);
     }
     .dd-option:hover { background: var(--green-soft); }
     .dd-option.is-selected { color: var(--red); }
@@ -272,9 +280,10 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     }
     li[hidden], .group[hidden], .drawer[hidden] { display: none; }
 
-    @media (max-width: 480px) {
+    @media (max-width: 560px) {
       .desc, .subhead, .rows a { margin-left: 0; padding-left: 1.4rem; }
-      .filter-bar { gap: 0.5rem 0.75rem; }
+      .work-intro { align-items: stretch; }
+      .filter-bar { flex: 1 1 100%; gap: 0.5rem 0.75rem; }
       .dropdown { flex: 1 1 100%; }
       .dd-toggle { width: 100%; min-width: 0; }
       .dd-menu { left: 0; right: 0; }

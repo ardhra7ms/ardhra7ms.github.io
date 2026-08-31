@@ -21,7 +21,7 @@
 
   --font-mono: "Courier Prime", "Courier New", ui-monospace, monospace;
   --measure: 68ch;       /* reading line length */
-  --wrap: 880px;         /* max content width = reading measure, so every block shares one column edge (shared by .wrap and the bg clear zone) */
+  --wrap: 820px;         /* max content width = reading measure, so every block shares one column edge (shared by .wrap and the bg clear zone) */
 }
 
 * { box-sizing: border-box; }
