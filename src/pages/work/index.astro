@@ -87,7 +87,6 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
   </section>
 
   <div class="filter-bar">
-    <button type="button" id="filter-clear" class="filter-clear" hidden>Clear</button>
     <div class="dropdown" id="tag-dropdown">
       <button type="button" class="dd-toggle" id="dd-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter projects by tag">
         <span class="dd-value" id="dd-value">All projects</span>
@@ -98,6 +97,7 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
         {allTags.map((t) => <li role="option" data-value={t.toLowerCase()} class="dd-option">{t}</li>)}
       </ul>
     </div>
+    <button type="button" id="filter-clear" class="filter-clear" hidden>Clear</button>
   </div>
   <p class="no-results" id="no-results" hidden>No projects with that tag yet.</p>
 
@@ -223,7 +223,7 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     /* Filter bar */
     .filter-bar {
       display: flex; align-items: center; gap: 0.75rem;
-      flex-wrap: wrap; justify-content: flex-end;
+      flex-wrap: wrap; justify-content: flex-start;
       margin-bottom: 1.25rem;
     }
 
@@ -246,7 +246,7 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     .dropdown.open .dd-toggle .chevron { transform: rotate(180deg); }
 
     .dd-menu {
-      position: absolute; top: calc(100% - 1px); right: 0; z-index: 20;
+      position: absolute; top: calc(100% - 1px); left: 0; z-index: 20;
       list-style: none; margin: 0; padding: 0;
       min-width: 100%;
       background: var(--paper);

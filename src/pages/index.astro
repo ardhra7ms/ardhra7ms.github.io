@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 ---
 <Base bg>
-  <section class="hero measure">
+  <section class="hero">
     <p class="kicker"><span class="ink">Content Designer</span> → Content Strategist</p>
     <h1>
       I make products talk the way <span class="red">people</span> do.
@@ -31,7 +31,6 @@ import Base from "../layouts/Base.astro";
   <style>
     /* Two type sizes only: a headline size and a body size.
        Hierarchy comes from weight and colour, not more sizes. */
-    .hero.measure { max-width: 82ch; }
     .hero { margin-bottom: 4.5rem; }
     .hero h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); margin: 0.5rem 0 1.25rem; line-height: 1.15; }
     .subtitle {
