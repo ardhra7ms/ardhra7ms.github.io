@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 ---
-<Base bg bodyClass="home">
+<Base bg>
   <section class="hero">
     <p class="kicker"><span class="ink">Content Designer</span> → Content Strategist</p>
     <h1>
@@ -9,7 +9,7 @@ import Base from "../layouts/Base.astro";
     </h1>
     <p class="subtitle">I'm a writer, artist, and lover of languages, trained in communications, digital media, and engineering. On a journey to expand content design from words to <span class="nowrap">AI-forward</span> systems.</p>
     <p class="muted lede">
-      I build the connective tissue for products to be cohesive in large ecosystems, including terminology research, object guides and mapping the relationships between concepts, alongside style and Responsible AI guidelines to create comprehensive content systems.<span class="cursor" aria-hidden="true"></span>
+      I build the connective tissue for products to be cohesive in large ecosystems, including <span class="em">terminology research</span>, <span class="em">object guides</span> and <span class="em">mapping the relationships between concepts</span>, alongside style and <span class="em">Responsible AI guidelines</span> to create comprehensive content systems.<span class="cursor" aria-hidden="true"></span>
     </p>
   </section>
 
@@ -34,11 +34,12 @@ import Base from "../layouts/Base.astro";
     .hero { margin-bottom: 4.5rem; }
     .hero h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); margin: 0.5rem 0 1.25rem; line-height: 1.15; }
     .subtitle {
-      font-size: 1.05rem; font-weight: 400;
-      color: var(--ink); margin: 0 0 1.6rem; line-height: 1.75;
+      font-size: 1.2rem; font-weight: 400;
+      color: var(--ink); margin: 0 0 1.5rem; line-height: 1.55;
     }
     .subtitle .nowrap { white-space: nowrap; }
-    .lede { font-size: 1.05rem; line-height: 1.75; }
+    .lede { font-size: 0.95rem; line-height: 1.7; }
+    .lede .em { color: var(--green); font-weight: 700; }
 
     .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink); border: 2px solid var(--ink); }
     .path {
