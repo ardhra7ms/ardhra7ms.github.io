@@ -9,11 +9,28 @@ const creative = await getCollection("creative");
 const pick = (coll, ids) =>
   ids.map((id) => coll.find((p) => p.id === id)).filter(Boolean);
 
+// Curated filter tags per item (first pass — easy to tweak).
+// Falls back to the entry's category/kind when an id isn't listed here.
+const tagMap = {
+  "dsi": ["Content design", "AI", "Systems thinking"],
+  "ediscovery": ["Content design", "Strategy"],
+  "ather-careers": ["Writing", "Employer brand"],
+  "neur-xr": ["Content design", "AR/XR", "Accessibility"],
+  "harms-overreliance": ["Responsible AI", "Writing"],
+  "continuum-xr": ["AR/XR", "Creative"],
+  "nike-accessibility": ["Accessibility", "Research"],
+  "rome-brand": ["Brand", "Creative"],
+  "stumbling-upon-rome": ["Writing", "Creative"],
+  "magazine-essay": ["Writing", "Editorial design"],
+};
+const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
+
 // normalise an entry into a menu row
 const row = (entry, base) => ({
   href: `${base}/${entry.id}`,
   title: entry.data.title || entry.id,
   tag: entry.data.category || entry.data.kind || "",
+  filters: tagMap[entry.id] || (entry.data.category ? [cap(entry.data.category)] : []),
   ext: false,
 });
 
@@ -40,14 +57,14 @@ const writing = pick(creative, ["stumbling-upon-rome", "magazine-essay"]).map((e
   row(e, "/projects")
 );
 const talks = [
-  { title: "Ladies That UX — speaker panel on the career journey", href: "https://www.linkedin.com/feed/update/urn:li:activity:7395276655264653312/", tag: "talk", ext: true },
-  { title: "Screen Summit — design judge", href: "https://www.linkedin.com/feed/update/urn:li:activity:7467714616295526401/", tag: "judging", ext: true },
-  { title: "Talk (Instagram)", href: "https://www.instagram.com/p/CpELpU6JCpS/", tag: "talk", ext: true },
-  { title: "Talk (video)", href: "https://youtu.be/Xvr2fg2VcIA", tag: "talk", ext: true },
-  { title: "Search for True North", href: "https://www.linkedin.com/pulse/search-true-north-ardhra-s/", tag: "article", ext: true },
-  { title: "Year in Warp", href: "https://www.linkedin.com/pulse/year-warp-ardhra-s/", tag: "article", ext: true },
-  { title: "Making Software Intuitive Through Language", href: "https://www.linkedin.com/pulse/making-software-intuitive-through-language-microsoft-arihant-vaisraj-k4yzc/", tag: "article · co-authored", ext: true },
-  { title: "UW CommLead — profile", href: "https://commlead.uw.edu/2025/03/06/ardhra-sivasankaran/", tag: "feature", ext: true },
+  { title: "Ladies That UX — speaker panel on the career journey", href: "https://www.linkedin.com/feed/update/urn:li:activity:7395276655264653312/", tag: "talk", filters: ["Speaking"], ext: true },
+  { title: "Screen Summit — design judge", href: "https://www.linkedin.com/feed/update/urn:li:activity:7467714616295526401/", tag: "judging", filters: ["Speaking"], ext: true },
+  { title: "Talk (Instagram)", href: "https://www.instagram.com/p/CpELpU6JCpS/", tag: "talk", filters: ["Speaking"], ext: true },
+  { title: "Talk (video)", href: "https://youtu.be/Xvr2fg2VcIA", tag: "talk", filters: ["Speaking"], ext: true },
+  { title: "Search for True North", href: "https://www.linkedin.com/pulse/search-true-north-ardhra-s/", tag: "article", filters: ["Writing", "Article"], ext: true },
+  { title: "Year in Warp", href: "https://www.linkedin.com/pulse/year-warp-ardhra-s/", tag: "article", filters: ["Writing", "Article"], ext: true },
+  { title: "Making Software Intuitive Through Language", href: "https://www.linkedin.com/pulse/making-software-intuitive-through-language-microsoft-arihant-vaisraj-k4yzc/", tag: "article · co-authored", filters: ["Writing", "Article"], ext: true },
+  { title: "UW CommLead — profile", href: "https://commlead.uw.edu/2025/03/06/ardhra-sivasankaran/", tag: "feature", filters: ["Feature"], ext: true },
 ];
 
 const sections = [
@@ -55,6 +72,13 @@ const sections = [
   { title: "Curiosity quests", desc: "Where work meets passion", open: false, rows: sideMain, groups: [{ subhead: "Grad projects", rows: gradProjects }] },
   { title: "For the love of it", desc: "When inspiration finds me in daydreams (at night)", open: false, rows: writing, groups: [{ subhead: "Talks & writing", rows: talks }] },
 ];
+
+// Union of every filter tag across all rows → dropdown options (sorted).
+const allRows = sections.flatMap((s) => [...s.rows, ...s.groups.flatMap((g) => g.rows)]);
+const allTags = [...new Set(allRows.flatMap((r) => r.filters || []))].sort((a, b) =>
+  a.localeCompare(b)
+);
+const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
 ---
 <Base bg title="Work — Ardhra Sivasankaran">
   <section class="work-intro">
@@ -62,9 +86,22 @@ const sections = [
     <h1>What I've made<span class="cursor" aria-hidden="true"></span></h1>
   </section>
 
+  <div class="filter-bar">
+    <label for="tag-filter">Filter by tag</label>
+    <div class="select-wrap">
+      <select id="tag-filter" aria-label="Filter projects by tag">
+        <option value="all">All projects</option>
+        {allTags.map((t) => <option value={t.toLowerCase()}>{t}</option>)}
+      </select>
+      <span class="chevron" aria-hidden="true">▾</span>
+    </div>
+    <button type="button" id="filter-clear" class="filter-clear" hidden>Clear</button>
+  </div>
+  <p class="no-results" id="no-results" hidden>No projects with that tag yet.</p>
+
   <div class="menu">
     {sections.map((s) => (
-      <details class="drawer" open={s.open}>
+      <details class="drawer" open={s.open} data-open-default={s.open ? "1" : "0"}>
         <summary>
           <span class="glyph" aria-hidden="true"><svg class="leaf" viewBox="0 0 24 24"><path d="M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05z"/></svg><svg class="flower" viewBox="0 0 24 24"><circle class="petal" cx="12" cy="7" r="3.2"/><circle class="petal" cx="16.76" cy="10.45" r="3.2"/><circle class="petal" cx="14.94" cy="16.05" r="3.2"/><circle class="petal" cx="9.06" cy="16.05" r="3.2"/><circle class="petal" cx="7.24" cy="10.45" r="3.2"/><circle class="center" cx="12" cy="12" r="2.4"/></svg></span>
           <span class="label">{s.title}</span>
@@ -73,7 +110,7 @@ const sections = [
         <p class="desc">{s.desc}</p>
         <ul class="rows">
           {s.rows.map((r) => (
-            <li>
+            <li data-tags={dataTags(r)}>
               <a href={r.href} target={r.ext ? "_blank" : undefined} rel={r.ext ? "noopener" : undefined}>
                 <span class="row-title">{r.title}{r.ext && <span class="ext" aria-hidden="true"> ↗</span>}</span>
                 {r.tag && <span class="leader" aria-hidden="true"></span>}
@@ -83,11 +120,11 @@ const sections = [
           ))}
         </ul>
         {s.groups.map((g) => (
-          <>
+          <div class="group">
             <p class="subhead">{g.subhead}</p>
             <ul class="rows">
               {g.rows.map((r) => (
-                <li>
+                <li data-tags={dataTags(r)}>
                   <a href={r.href} target={r.ext ? "_blank" : undefined} rel={r.ext ? "noopener" : undefined}>
                     <span class="row-title">{r.title}{r.ext && <span class="ext" aria-hidden="true"> ↗</span>}</span>
                     {r.tag && <span class="leader" aria-hidden="true"></span>}
@@ -96,7 +133,7 @@ const sections = [
                 </li>
               ))}
             </ul>
-          </>
+          </div>
         ))}
       </details>
     ))}
@@ -181,9 +218,99 @@ const sections = [
       text-transform: uppercase; letter-spacing: 0.14em;
     }
 
+    /* Filter bar */
+    .filter-bar {
+      display: flex; align-items: center; gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .filter-bar label {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--grey-600);
+    }
+    .select-wrap { position: relative; display: inline-flex; align-items: center; }
+    #tag-filter {
+      appearance: none; -webkit-appearance: none;
+      font: inherit; font-size: 0.95rem;
+      color: var(--ink); background: var(--paper);
+      border: 1px solid var(--ink);
+      border-radius: 0;
+      padding: 0.5rem 2.2rem 0.5rem 0.75rem;
+      cursor: pointer;
+      min-width: 12rem;
+    }
+    #tag-filter:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+    .select-wrap .chevron {
+      position: absolute; right: 0.7rem; pointer-events: none;
+      color: var(--red); font-size: 0.8rem;
+    }
+    .filter-clear {
+      font: inherit; font-size: 0.82rem;
+      background: none; border: 0; color: var(--red);
+      cursor: pointer; padding: 0.3rem 0.2rem; text-decoration: underline;
+    }
+    .no-results {
+      margin: 0 0 1.25rem; color: var(--grey-600); font-style: normal;
+    }
+    li[hidden], .group[hidden], .drawer[hidden] { display: none; }
+
     @media (max-width: 480px) {
       .desc, .subhead, .rows a { margin-left: 0; padding-left: 1.4rem; }
+      .filter-bar { gap: 0.5rem 0.75rem; }
+      #tag-filter { min-width: 0; width: 100%; flex: 1 1 auto; }
+      .select-wrap { flex: 1 1 100%; }
     }
   </style>
+
+  <script>
+    const select = document.getElementById("tag-filter");
+    const clearBtn = document.getElementById("filter-clear");
+    const noResults = document.getElementById("no-results");
+    const drawers = Array.from(document.querySelectorAll(".menu .drawer"));
+
+    function apply(tag) {
+      const all = tag === "all";
+      let totalMatches = 0;
+
+      drawers.forEach((drawer) => {
+        let drawerMatches = 0;
+
+        // group wrappers (subhead + list) and the top-level list
+        drawer.querySelectorAll(".rows").forEach((ul) => {
+          let listMatches = 0;
+          ul.querySelectorAll("li[data-tags]").forEach((li) => {
+            const tags = (li.getAttribute("data-tags") || "").split("|");
+            const show = all || tags.includes(tag);
+            li.hidden = !show;
+            if (show) listMatches++;
+          });
+          // hide an empty grouped list + its subhead
+          const group = ul.closest(".group");
+          if (group) group.hidden = !all && listMatches === 0;
+          drawerMatches += listMatches;
+        });
+
+        totalMatches += drawerMatches;
+
+        if (all) {
+          drawer.hidden = false;
+          drawer.open = drawer.dataset.openDefault === "1";
+        } else {
+          drawer.hidden = drawerMatches === 0;
+          drawer.open = drawerMatches > 0;
+        }
+      });
+
+      noResults.hidden = all || totalMatches > 0;
+      clearBtn.hidden = all;
+    }
+
+    select.addEventListener("change", (e) => apply(e.target.value));
+    clearBtn.addEventListener("click", () => {
+      select.value = "all";
+      apply("all");
+      select.focus();
+    });
+  </script>
 </Base>
 
