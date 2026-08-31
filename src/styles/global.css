@@ -72,6 +72,11 @@ h1, h2, h3 { font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
 .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 1.5rem; }
 .measure { max-width: var(--measure); }
 
+/* Landing page only: constrain the shared column to the reading measure so the
+   masthead rule, hero, cards and footer align to one edge. `body.home` outranks
+   `:root` by specificity, so this holds regardless of stylesheet order. */
+body.home { --wrap: 820px; }
+
 /* opt-in floral background: full-bleed layer that scrolls with the page.
    The clear zone = the content wrap width (responsive: shrinks to the viewport on
    small screens), so NO artwork ever sits behind content — flowers live in the gutters. */
