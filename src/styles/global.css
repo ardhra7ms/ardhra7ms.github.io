@@ -98,12 +98,54 @@ body.home { --wrap: 820px; }
     #000 calc(50% + var(--clearw) / 2 + var(--feather)));
 }
 
+body.home .page-bg {
+  background-size: 94% auto;
+  opacity: 0.74;
+  -webkit-mask-image: linear-gradient(to right,
+    transparent 0,
+    #000 5vw,
+    #000 calc(50% - var(--clearw) / 2 - var(--feather)),
+    transparent calc(50% - var(--clearw) / 2),
+    transparent calc(50% + var(--clearw) / 2),
+    #000 calc(50% + var(--clearw) / 2 + var(--feather)),
+    #000 calc(100% - 5vw),
+    transparent 100%);
+          mask-image: linear-gradient(to right,
+    transparent 0,
+    #000 5vw,
+    #000 calc(50% - var(--clearw) / 2 - var(--feather)),
+    transparent calc(50% - var(--clearw) / 2),
+    transparent calc(50% + var(--clearw) / 2),
+    #000 calc(50% + var(--clearw) / 2 + var(--feather)),
+    #000 calc(100% - 5vw),
+    transparent 100%);
+}
+
 /* Phones have no side gutters, so the horizontal clear-zone would hide every
    flower. Switch to soft top & bottom bands that sit behind the sparse header
    and footer chrome, kept fully clear of the main reading column. */
 @media (max-width: 640px) {
   .page-bg {
     opacity: 0.8;
+    -webkit-mask-image: linear-gradient(to bottom,
+      #000 0,
+      #000 84px,
+      transparent 122px,
+      transparent calc(100% - 175px),
+      #000 calc(100% - 95px),
+      #000 100%);
+            mask-image: linear-gradient(to bottom,
+      #000 0,
+      #000 84px,
+      transparent 122px,
+      transparent calc(100% - 175px),
+      #000 calc(100% - 95px),
+      #000 100%);
+  }
+
+  body.home .page-bg {
+    background-size: 100% auto;
+    opacity: 0.96;
     -webkit-mask-image: linear-gradient(to bottom,
       #000 0,
       #000 84px,
@@ -197,6 +239,8 @@ body.dark .mark-flower .center { fill: #0d130f; }
 /* small screens: tighten gutters and stack the footer */
 @media (max-width: 560px) {
   .wrap { padding: 0 1rem; }
+  .site-nav { display: flex; gap: 0.8rem; }
+  .site-nav a { margin-left: 0; }
   .site-foot { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
 }
 

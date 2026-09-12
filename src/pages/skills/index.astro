@@ -3,55 +3,189 @@ import Base from "../../layouts/Base.astro";
 
 // Fireflies carry strengths. Edit this list freely — these are seeded from
 // your material and meant to be replaced with your own words.
-// x / y are % positions on the night canvas; dur/delay tune the drift.
+// Positions are percentages of the night canvas. Each firefly also has its
+// own heading and flight path so the movement feels naturally varied.
 const strengths = [
-  { text: "Object-oriented UX",     x: 12, y: 8,  mx: 44, my: 5,  dur: 15, delay: 0,   blurb: "Designing content as a system of objects and relationships, not just isolated screens.", href: "/work/dsi" },
-  { text: "Terminology",            x: 60, y: 9,  mx: 55, my: 8,  dur: 18, delay: 1.5, blurb: "Building shared vocabularies so a product's core terms mean the same thing everywhere.", href: "/work/ediscovery" },
-  { text: "Concept mapping",        x: 36, y: 13, mx: 45, my: 12, dur: 16, delay: 3,   blurb: "Mapping how concepts relate, so meaning stays coherent across a whole experience.", href: "/work/dsi" },
-  { text: "Vibe coding",            x: 76, y: 15, mx: 35, my: 15, dur: 20, delay: 2,   blurb: "Prototyping and building with AI, turning rough ideas into working things fast.", href: "/work/neur-xr" },
-  { text: "AI content systems",     x: 16, y: 18, mx: 44, my: 18, dur: 19, delay: 0.8, blurb: "Designing how AI speaks, and the guardrails that keep it clear and honest.", href: "/work/harms-overreliance" },
-  { text: "User Experience Design", x: 46, y: 21, mx: 44, my: 21, dur: 21, delay: 3.6, blurb: "Shaping end-to-end flows so a product feels intuitive, human, and easy to move through.", href: "/work/ather-careers" },
-  { text: "Content Design",         x: 70, y: 24, mx: 48, my: 25, dur: 16, delay: 2.4, blurb: "Words, structure, and guidance that help people move through a product with ease.", href: "/work/ediscovery" },
-  { text: "Writing",                x: 26, y: 28, mx: 35, my: 28, dur: 18, delay: 5,   blurb: "Where my love of language began, from poetry to product.", href: "/projects/magazine-essay" },
-  { text: "Product development",    x: 56, y: 30, mx: 44, my: 31, dur: 15, delay: 3.2, blurb: "Partnering from envisioning to launch, owning the content end to end.", href: "/work/dsi" },
-  { text: "Responsible AI",         x: 80, y: 34, mx: 48, my: 34, dur: 18, delay: 0.4, blurb: "Messaging that keeps people oriented and reduces overreliance on AI.", href: "/work/harms-overreliance" },
-  { text: "Accessibility",          x: 14, y: 37, mx: 52, my: 38, dur: 17, delay: 2.8, blurb: "Auditing and designing so experiences work well for everyone.", href: "/work/nike-accessibility" },
-  { text: "Critical thinking",      x: 42, y: 40, mx: 45, my: 41, dur: 19, delay: 4.4, blurb: "Asking the hard questions to find the real problem beneath the ask.", href: "/work/dsi" },
-  { text: "User research",          x: 66, y: 44, mx: 45, my: 45, dur: 16, delay: 1.8, blurb: "Listening closely to understand how people think, work, and struggle.", href: "/work/neur-xr" },
-  { text: "Art",                    x: 24, y: 48, mx: 35, my: 48, dur: 21, delay: 3.8, blurb: "Drawing and painting, where I think with my hands and see differently.", href: "/projects/rome-brand" },
-  { text: "Music",                  x: 52, y: 51, mx: 55, my: 51, dur: 15, delay: 0.6, blurb: "A lifelong thread that tunes how I hear rhythm and voice.", href: "/story" },
-  { text: "Communications",         x: 34, y: 55, mx: 45, my: 54, dur: 17, delay: 1.4, blurb: "Trained across communications, digital media, and engineering, connecting people and ideas.", href: "/projects/stumbling-upon-rome" },
-  { text: "Storytelling",           x: 72, y: 58, mx: 48, my: 58, dur: 19, delay: 3.4, blurb: "Every good product, like every good essay, tells one coherent story.", href: "/projects/stumbling-upon-rome" },
+  { text: "Object-oriented UX",     x: 8,  y: 10, mx: 42, my: 5,  angle: -32, dx1: 18,  dy1: -11, dx2: -10, dy2: 9,   dur: 15, delay: 0,   blurb: "Designing content as a system of objects and relationships, not just isolated screens.", href: "/work/dsi" },
+  { text: "Terminology",            x: 57, y: 8,  mx: 55, my: 10, angle: 24,  dx1: -14, dy1: -8,  dx2: 11,  dy2: 13,  dur: 18, delay: 1.5, blurb: "Building shared vocabularies so a product's core terms mean the same thing everywhere.", href: "/work/ediscovery" },
+  { text: "Concept mapping",        x: 32, y: 19, mx: 45, my: 15, angle: -10, dx1: 13,  dy1: 10,  dx2: -15, dy2: -7,  dur: 16, delay: 3,   blurb: "Mapping how concepts relate, so meaning stays coherent across a whole experience.", href: "/work/dsi" },
+  { text: "Vibe coding",            x: 84, y: 14, mx: 42, my: 20, angle: 38,  dx1: -17, dy1: 9,   dx2: 14,  dy2: -12, dur: 20, delay: 2,   blurb: "Prototyping and building with AI, turning rough ideas into working things fast.", href: "/work/neur-xr" },
+  { text: "AI content systems",     x: 12, y: 31, mx: 50, my: 25, angle: -42, dx1: 15,  dy1: -14, dx2: -9,  dy2: 11,  dur: 19, delay: 0.8, blurb: "Designing how AI speaks, and the guardrails that keep it clear and honest.", href: "/work/harms-overreliance" },
+  { text: "User Experience Design", x: 46, y: 29, mx: 48, my: 30, angle: 14,  dx1: -12, dy1: 12,  dx2: 16,  dy2: -8,  dur: 21, delay: 3.6, blurb: "Shaping end-to-end flows so a product feels intuitive, human, and easy to move through.", href: "/work/ather-careers" },
+  { text: "Content Design",         x: 76, y: 30, mx: 47, my: 35, angle: -22, dx1: 17,  dy1: 8,   dx2: -13, dy2: -10, dur: 16, delay: 2.4, blurb: "Words, structure, and guidance that help people move through a product with ease.", href: "/work/ediscovery" },
+  { text: "Writing",                x: 26, y: 43, mx: 42, my: 40, angle: 31,  dx1: -10, dy1: -13, dx2: 14,  dy2: 8,   dur: 18, delay: 5,   blurb: "Where my love of language began, from poetry to product.", href: "/projects/magazine-essay" },
+  { text: "Product development",    x: 56, y: 44, mx: 49, my: 45, angle: -36, dx1: 12,  dy1: 14,  dx2: -16, dy2: -9,  dur: 15, delay: 3.2, blurb: "Partnering from envisioning to launch, owning the content end to end.", href: "/work/dsi" },
+  { text: "Responsible AI",         x: 87, y: 47, mx: 50, my: 50, angle: 19,  dx1: -18, dy1: -7,  dx2: 9,   dy2: 13,  dur: 18, delay: 0.4, blurb: "Messaging that keeps people oriented and reduces overreliance on AI.", href: "/work/harms-overreliance" },
+  { text: "Accessibility",          x: 10, y: 57, mx: 52, my: 55, angle: 43,  dx1: 14,  dy1: 11,  dx2: -11, dy2: -14, dur: 17, delay: 2.8, blurb: "Auditing and designing so experiences work well for everyone.", href: "/work/nike-accessibility" },
+  { text: "Critical thinking",      x: 39, y: 60, mx: 45, my: 60, angle: -15, dx1: -15, dy1: 8,   dx2: 13,  dy2: -12, dur: 19, delay: 4.4, blurb: "Asking the hard questions to find the real problem beneath the ask.", href: "/work/dsi" },
+  { text: "User research",          x: 70, y: 64, mx: 46, my: 65, angle: 28,  dx1: 11,  dy1: -14, dx2: -14, dy2: 9,   dur: 16, delay: 1.8, blurb: "Listening closely to understand how people think, work, and struggle.", href: "/work/neur-xr" },
+  { text: "Art",                    x: 22, y: 76, mx: 39, my: 70, angle: -35, dx1: -9,  dy1: 13,  dx2: 16,  dy2: -8,  dur: 21, delay: 3.8, blurb: "Drawing and painting, where I think with my hands and see differently.", href: "/projects/rome-brand" },
+  { text: "Music",                  x: 54, y: 78, mx: 55, my: 76, angle: 9,   dx1: 18,  dy1: -6,  dx2: -12, dy2: 12,  dur: 15, delay: 0.6, blurb: "A lifelong thread that tunes how I hear rhythm and voice.", href: "/story" },
+  { text: "Communications",         x: 34, y: 89, mx: 48, my: 83, angle: 36,  dx1: -13, dy1: -11, dx2: 10,  dy2: 14,  dur: 17, delay: 1.4, blurb: "Trained across communications, digital media, and engineering, connecting people and ideas.", href: "/projects/stumbling-upon-rome" },
+  { text: "Storytelling",           x: 80, y: 87, mx: 50, my: 91, angle: -25, dx1: 15,  dy1: 10,  dx2: -17, dy2: -7,  dur: 19, delay: 3.4, blurb: "Every good product, like every good essay, tells one coherent story.", href: "/projects/stumbling-upon-rome" },
 ];
+
 ---
 <Base bodyClass="dark">
   <section class="skills-intro">
-    <p class="kicker">The skill tree</p>
-    <h1>Strengths, as <span class="red">fireflies</span>.</h1>
+    <p class="kicker">Transient growth</p>
+    <h1>Skills that <span class="red">light the way</span>.</h1>
     <p class="muted">
-      Each light carries something I bring. Hover or tab through them and they'll glow. <span class="cursor" aria-hidden="true"></span>
+      Each firefly carries a skill I nurture. Hover or tab through them to see where they're headed. <span class="cursor" aria-hidden="true"></span>
     </p>
   </section>
 
-  <section class="night" aria-labelledby="skills-heading">
+  <section class="night" aria-labelledby="skills-heading" data-night-sky>
     <h2 id="skills-heading" class="sr-only">My strengths</h2>
+    <div class="moonlight" aria-hidden="true"></div>
+
+    <button class="moon" type="button" data-moon aria-label="The Moon">
+      <svg class="moon-disc" viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="moon-shadow" cx="50" cy="50" r="47"></circle>
+        <path class="moon-light" data-moon-light></path>
+      </svg>
+      <span class="moon-tip" data-moon-tip></span>
+    </button>
+
     <ul class="fireflies" aria-label="Strengths">
       {strengths.map((s) => (
         <li
-          class:list={["firefly", { "flip-x": s.x > 52, "flip-y": s.y > 66 }]}
+          class:list={["firefly", { "flip-x": s.x > 60, "flip-y": s.y > 72 }]}
           tabindex="0"
-          style={`--x:${s.x}%; --y:${s.y}%; --mx:${s.mx}%; --my:${s.my}%; --dur:${s.dur}s; --delay:${s.delay}s;`}
+          style={`--x:${s.x}%; --y:${s.y}%; --mx:${s.mx}%; --my:${s.my}%; --angle:${s.angle}deg; --dx1:${s.dx1}px; --dy1:${s.dy1}px; --dx2:${s.dx2}px; --dy2:${s.dy2}px; --dur:${s.dur}s; --delay:${s.delay}s;`}
         >
           <span class="glow" aria-hidden="true"></span>
           <span class="label">{s.text}</span>
           <div class="card" role="group" aria-label={s.text}>
             <p class="card-text">{s.blurb}</p>
-            <a class="card-link" href={s.href}>See it &rarr;</a>
+            <a class="card-link" href={s.href}>In action &rarr;</a>
           </div>
         </li>
       ))}
     </ul>
   </section>
+
+  <script>
+    const night = document.querySelector<HTMLElement>("[data-night-sky]");
+    const moon = document.querySelector<HTMLButtonElement>("[data-moon]");
+
+    if (night && moon) {
+      const phaseNames = [
+        "new moon",
+        "thin waxing crescent",
+        "waxing crescent",
+        "broad waxing crescent",
+        "first quarter",
+        "waxing gibbous",
+        "waxing gibbous, nearly full",
+        "full moon",
+        "waning gibbous, nearly full",
+        "waning gibbous",
+        "last quarter",
+        "broad waning crescent",
+        "waning crescent",
+        "thin waning crescent",
+      ];
+      const phasePaths = [
+        "",
+        "M50 3A47 47 0 0 1 50 97C92 77 92 23 50 3Z",
+        "M50 3A47 47 0 0 1 50 97C82 77 82 23 50 3Z",
+        "M50 3A47 47 0 0 1 50 97C67 77 67 23 50 3Z",
+        "M50 3A47 47 0 0 1 50 97L50 3Z",
+        "M50 3A47 47 0 0 1 50 97C35 77 35 23 50 3Z",
+        "M50 3A47 47 0 0 1 50 97C15 77 15 23 50 3Z",
+        "M50 3A47 47 0 1 1 50 97A47 47 0 1 1 50 3Z",
+        "M50 3A47 47 0 0 0 50 97C85 77 85 23 50 3Z",
+        "M50 3A47 47 0 0 0 50 97C65 77 65 23 50 3Z",
+        "M50 3A47 47 0 0 0 50 97L50 3Z",
+        "M50 3A47 47 0 0 0 50 97C35 77 35 23 50 3Z",
+        "M50 3A47 47 0 0 0 50 97C18 77 18 23 50 3Z",
+        "M50 3A47 47 0 0 0 50 97C8 77 8 23 50 3Z",
+      ];
+      const phaseTips = [
+        "I need time to myself but there is beauty in the quiet dark.",
+        "Thank you for your patience as I work on myself.",
+        "Thank you for your patience as I work on myself.",
+        "Thank you for your patience as I work on myself.",
+        "Halfway on a journey still feels very far away. But the sky has no care for time.",
+        "To be full of excitement for what's coming is true joy.",
+        "To be full of excitement for what's coming is true joy.",
+        "The sky gave us the moon so we don't feel all alone after sundown.",
+        "To be full of excitement for what's coming is true joy.",
+        "To be full of excitement for what's coming is true joy.",
+        "Halfway on a journey still feels very far away. But the sky has no care for time.",
+        "Thank you for your patience as I work on myself.",
+        "Thank you for your patience as I work on myself.",
+        "Thank you for your patience as I work on myself.",
+      ];
+      const dayInMilliseconds = 86_400_000;
+      const synodicMonth = 29.530588;
+      const referenceNewMoon = Date.UTC(2000, 0, 6, 18, 15);
+      const daysSinceReference = (Date.now() - referenceNewMoon) / dayInMilliseconds;
+      const lunarAge = ((daysSinceReference % synodicMonth) + synodicMonth) % synodicMonth;
+      const lunarProgress = lunarAge / synodicMonth;
+      const phasePreviews: Record<string, number> = {
+        dark: 0,
+        crescent: 2,
+        half: 4,
+        gibbous: 5,
+        full: 7,
+      };
+      const previewIlluminations: Record<string, number> = {
+        dark: 0,
+        crescent: 19,
+        half: 50,
+        gibbous: 81,
+        full: 100,
+      };
+      const requestedPreview = new URLSearchParams(window.location.search).get("moon");
+      const previewPhase = requestedPreview ? phasePreviews[requestedPreview] : undefined;
+      const phase = previewPhase ??
+        Math.round(lunarProgress * phaseNames.length) % phaseNames.length;
+      const displayedProgress = previewPhase === undefined
+        ? lunarProgress
+        : phase / phaseNames.length;
+      const illumination = requestedPreview && requestedPreview in previewIlluminations
+        ? previewIlluminations[requestedPreview]
+        : Math.round(
+            ((1 - Math.cos(displayedProgress * Math.PI * 2)) / 2) * 100,
+          );
+      const moonLight = moon.querySelector<SVGPathElement>("[data-moon-light]");
+      const moonTip = moon.querySelector<HTMLElement>("[data-moon-tip]");
+      const activateMoonlight = () => {
+        night.classList.toggle("moon-shadowed", phase === 0);
+        night.classList.toggle("moon-brightened", phase !== 0);
+      };
+      const restoreMoonlight = () => {
+        night.classList.remove("moon-shadowed", "moon-brightened");
+      };
+
+      moonLight?.setAttribute("d", phasePaths[phase]);
+      if (moonTip) moonTip.textContent = phaseTips[phase];
+      moon.dataset.dark = String(phase === 0);
+      moon.dataset.tipGroup = phase === 0
+        ? "dark"
+        : phase === 4 || phase === 10
+          ? "half"
+          : phase === 7
+            ? "full"
+            : [5, 6, 8, 9].includes(phase)
+              ? "gibbous"
+              : "crescent";
+      night.style.setProperty(
+        "--phase-moonlight",
+        String(0.025 + (illumination / 100) * 0.07),
+      );
+      moon.setAttribute(
+        "aria-label",
+        `The Moon, shown as ${phaseNames[phase]}, approximately ${illumination}% illuminated`,
+      );
+      moon.addEventListener("pointerenter", activateMoonlight);
+      moon.addEventListener("pointerleave", restoreMoonlight);
+      moon.addEventListener("focus", activateMoonlight);
+      moon.addEventListener("blur", restoreMoonlight);
+    }
+  </script>
 
   <style>
     .skills-intro { margin-bottom: 2rem; }
@@ -63,16 +197,162 @@ const strengths = [
       left: 50%; right: 50%;
       margin-left: -50vw; margin-right: -50vw;
       width: 100vw;
-      min-height: 92vh;
+      min-height: clamp(1200px, 150svh, 1640px);
       overflow: hidden;
+      --moonlight: 0.018;
       background:
         radial-gradient(120% 90% at 50% 10%, #16211a 0%, #0d130f 55%, #080b09 100%);
       border-top: 1px solid #223027;
       border-bottom: 1px solid #223027;
     }
 
+    .night::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: rgba(0, 0, 0, 0);
+      transition: background 1.2s ease;
+    }
+
+    .moonlight {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 82% 11%, rgba(255, 255, 255, 0.75), transparent 25%),
+        linear-gradient(rgba(238, 245, 255, 0.7), rgba(215, 228, 220, 0.35));
+      opacity: var(--moonlight);
+      mix-blend-mode: screen;
+      transition: opacity 1.2s ease;
+    }
+
+    .night.moon-shadowed .moonlight {
+      opacity: 0;
+    }
+
+    .night.moon-brightened .moonlight {
+      opacity: calc(var(--moonlight) + var(--phase-moonlight, 0.04));
+    }
+
+    .night.moon-shadowed::after {
+      background: rgba(0, 0, 0, 0.16);
+    }
+
+    .moon {
+      position: absolute;
+      z-index: 6;
+      top: 5.5%;
+      right: 7%;
+      width: clamp(1.9rem, 4.5vw, 3rem);
+      aspect-ratio: 1;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      transition: transform 700ms cubic-bezier(0.2, 0.8, 0.25, 1), filter 400ms ease;
+    }
+
+    .moon:focus-visible {
+      outline: 2px solid rgba(239, 245, 255, 0.9);
+      outline-offset: 7px;
+      border-radius: 50%;
+    }
+
+    .moon-disc {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(231, 239, 255, 0.28);
+      transition: box-shadow 1s ease, filter 1s ease;
+    }
+
+    .moon-shadow {
+      fill: #101a14;
+      stroke: #7f9188;
+      stroke-width: 3;
+    }
+
+    .moon-light {
+      fill: #f5f2dc;
+    }
+
+    .moon[data-dark="true"]:hover .moon-disc,
+    .moon[data-dark="true"]:focus-visible .moon-disc {
+      filter: brightness(0.85);
+      box-shadow: 0 0 12px rgba(127, 145, 136, 0.28);
+    }
+
+    .moon[data-dark="false"]:hover .moon-disc,
+    .moon[data-dark="false"]:focus-visible .moon-disc {
+      filter: brightness(1.08);
+      box-shadow: 0 0 16px rgba(245, 242, 220, 0.48);
+    }
+
+    .moon:hover,
+    .moon:focus-visible {
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .moon-tip {
+      position: absolute;
+      top: 50%;
+      right: calc(100% + 14px);
+      width: 21ch;
+      padding: 0.42rem 0.5rem;
+      border: 1px solid #7f9188;
+      border-radius: 6px;
+      background: #f5f2dc;
+      color: #101a14;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.38);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      text-align: left;
+      text-wrap: balance;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translate(4px, -50%);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .moon[data-dark="true"] .moon-tip {
+      background: #101a14;
+      color: #f5f2dc;
+    }
+
+    .moon[data-tip-group="half"] .moon-tip {
+      width: 34ch;
+    }
+
+    .moon[data-tip-group="gibbous"] .moon-tip {
+      width: 24ch;
+    }
+
+    .moon[data-tip-group="full"] .moon-tip {
+      width: 26ch;
+    }
+
+    .moon:hover .moon-tip,
+    .moon:focus-visible .moon-tip {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(0, -50%);
+    }
+
     .fireflies {
-      position: absolute; inset: 0;
+      position: absolute;
+      z-index: 5;
+      inset: 7% 0 0;
       list-style: none; margin: 0; padding: 0;
     }
 
@@ -84,7 +364,9 @@ const strengths = [
       cursor: default;
       animation: drift var(--dur, 18s) ease-in-out var(--delay, 0s) infinite alternate;
       outline: none;
+      transition: opacity 300ms ease, filter 300ms ease;
     }
+    .firefly.flip-x { flex-direction: row-reverse; }
 
     .glow {
       position: relative;
@@ -92,6 +374,7 @@ const strengths = [
       width: 9px; height: 9px; border-radius: 50%;
       background: var(--green-apple);
       box-shadow: 0 0 6px 2px rgba(143, 203, 94, 0.55);
+      transform: rotate(var(--angle, 0deg));
       animation: pulse calc(var(--dur, 18s) / 4) ease-in-out infinite;
     }
 
@@ -108,8 +391,16 @@ const strengths = [
       pointer-events: none;
       transition: border-color 0.25s ease;
     }
-    .glow::before { left: 50%; transform: translate(-95%, -55%) rotate(-24deg); }
-    .glow::after  { left: 50%; transform: translate(-5%, -55%) rotate(24deg); }
+    .glow::before {
+      left: 50%;
+      transform-origin: 92% 60%;
+      animation: wing-left 1.8s ease-in-out calc(var(--delay, 0s) * -1) infinite alternate;
+    }
+    .glow::after {
+      left: 50%;
+      transform-origin: 8% 60%;
+      animation: wing-right 1.8s ease-in-out calc((var(--delay, 0s) + 0.12s) * -1) infinite alternate;
+    }
 
     .firefly:hover .glow::before,
     .firefly:focus-visible .glow::before,
@@ -195,23 +486,51 @@ const strengths = [
 
     @keyframes drift {
       0%   { transform: translate(-50%, -50%); }
-      50%  { transform: translate(calc(-50% + 14px), calc(-50% - 12px)); }
-      100% { transform: translate(calc(-50% - 10px), calc(-50% + 10px)); }
+      48%  { transform: translate(calc(-50% + var(--dx1)), calc(-50% + var(--dy1))); }
+      100% { transform: translate(calc(-50% + var(--dx2)), calc(-50% + var(--dy2))); }
     }
     @keyframes pulse {
       0%, 100% { opacity: 0.45; }
       50%      { opacity: 1; }
     }
-
+    @keyframes wing-left {
+      from { transform: translate(-95%, -55%) rotate(-21deg) scaleY(0.96); }
+      to   { transform: translate(-95%, -55%) rotate(-28deg) scaleY(1.02); }
+    }
+    @keyframes wing-right {
+      from { transform: translate(-5%, -55%) rotate(21deg) scaleY(0.96); }
+      to   { transform: translate(-5%, -55%) rotate(28deg) scaleY(1.02); }
+    }
     @media (prefers-reduced-motion: reduce) {
       .firefly { animation: none; }
-      .glow { animation: none; opacity: 1; }
+      .glow { animation: none; opacity: 1; transform: rotate(var(--angle, 0deg)); }
+      .glow::before,
+      .glow::after { animation: none; }
+      .glow::before { transform: translate(-95%, -55%) rotate(-24deg); }
+      .glow::after { transform: translate(-5%, -55%) rotate(24deg); }
+      .moon { transition: none; }
       .label { opacity: 1; }   /* all strengths readable when motion is off */
+    }
+
+    @media (max-width: 900px) {
+      .moon { right: 4%; }
+
+      .moon-tip {
+        top: calc(100% + 12px);
+        right: 0;
+        transform: translateY(-4px);
+      }
+
+      .moon:hover .moon-tip,
+      .moon:focus-visible .moon-tip {
+        transform: translateY(0);
+      }
     }
 
     @media (max-width: 640px) {
       .label { font-size: 0.82rem; }
-      .night { min-height: 82vh; }
+      .night { min-height: max(1450px, 180svh); }
+      .moon { top: 3.5%; right: 5%; }
       /* Phone-tuned positions keep each firefly's whole label on-screen
          (centre-anchored, so nothing clips off either edge). */
       .firefly { left: var(--mx); top: var(--my); }
