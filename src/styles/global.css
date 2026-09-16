@@ -134,6 +134,56 @@ body.home .page-bg::after {
   opacity: 0.84;
 }
 
+body.story .page-bg,
+body.work .page-bg {
+  overflow: hidden;
+  background: none;
+  opacity: 1;
+  -webkit-mask-image: none;
+          mask-image: none;
+}
+
+body.story .page-bg,
+body.work .page-bg {
+  position: fixed;
+  height: 100vh;
+}
+
+body.story .page-bg::before,
+body.story .page-bg::after,
+body.work .page-bg::before,
+body.work .page-bg::after {
+  content: "";
+  position: absolute;
+  width: calc(50% - var(--clearw) / 2);
+  background-image: url("/files/bg/flowers-original-red.png");
+  background-repeat: no-repeat;
+}
+
+body.story .page-bg::before,
+body.work .page-bg::before {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-image:
+    url("/files/bg/flowers-original.png"),
+    linear-gradient(to right, var(--red-soft) 0 68%, rgba(255, 236, 235, 0.55) 86%, transparent 100%);
+  background-position: left center, center;
+  background-size: auto 108%, 100% 100%;
+  opacity: 0.88;
+}
+
+body.story .page-bg::after,
+body.work .page-bg::after {
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-image: url("/files/bg/flowers-original.png");
+  background-position: right center;
+  background-size: auto 108%;
+  opacity: 0.82;
+}
+
 /* Phones have no side gutters, so the horizontal clear-zone would hide every
    flower. Switch to soft top & bottom bands that sit behind the sparse header
    and footer chrome, kept fully clear of the main reading column. */
@@ -181,6 +231,48 @@ body.home .page-bg::after {
   }
 
   body.home .page-bg::after {
+    display: none;
+  }
+
+  body.story .page-bg,
+  body.work .page-bg {
+    -webkit-mask-image: linear-gradient(to bottom,
+      #000 0,
+      #000 84px,
+      transparent 122px,
+      transparent calc(100% - 175px),
+      #000 calc(100% - 95px),
+      #000 100%);
+            mask-image: linear-gradient(to bottom,
+      #000 0,
+      #000 84px,
+      transparent 122px,
+      transparent calc(100% - 175px),
+      #000 calc(100% - 95px),
+      #000 100%);
+  }
+
+  body.story .page-bg::before,
+  body.work .page-bg::before {
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background-position: top center;
+    background-size: 100% auto;
+    opacity: 0.88;
+  }
+
+  body.story .page-bg::before,
+  body.work .page-bg::before {
+    background-image:
+      url("/files/bg/flowers-original.png"),
+      linear-gradient(to bottom, var(--red-soft), rgba(255, 236, 235, 0.45));
+    background-position: top center, center;
+    background-size: 100% auto, 100% 100%;
+  }
+
+  body.story .page-bg::after,
+  body.work .page-bg::after {
     display: none;
   }
 }

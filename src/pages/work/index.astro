@@ -24,11 +24,12 @@ const tagMap = {
   "magazine-essay": ["Writing", "Editorial design"],
 };
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
+const displayTitle = (title) => title.replace(/\s+—\s+/g, ": ");
 
 // normalise an entry into a menu row
 const row = (entry, base) => ({
   href: `${base}/${entry.id}`,
-  title: entry.data.title || entry.id,
+  title: displayTitle(entry.data.title || entry.id),
   tag: entry.data.category || entry.data.kind || "",
   filters: tagMap[entry.id] || (entry.data.category ? [cap(entry.data.category)] : []),
   ext: false,
@@ -57,14 +58,14 @@ const writing = pick(creative, ["stumbling-upon-rome", "magazine-essay"]).map((e
   row(e, "/projects")
 );
 const talks = [
-  { title: "Ladies That UX — speaker panel on the career journey", href: "https://www.linkedin.com/feed/update/urn:li:activity:7395276655264653312/", tag: "talk", filters: ["Speaking"], ext: true },
-  { title: "Screen Summit — design judge", href: "https://www.linkedin.com/feed/update/urn:li:activity:7467714616295526401/", tag: "judging", filters: ["Speaking"], ext: true },
+  { title: "Ladies That UX: speaker panel on the career journey", href: "https://www.linkedin.com/feed/update/urn:li:activity:7395276655264653312/", tag: "talk", filters: ["Speaking"], ext: true },
+  { title: "Screen Summit: design judge", href: "https://www.linkedin.com/feed/update/urn:li:activity:7467714616295526401/", tag: "judging", filters: ["Speaking"], ext: true },
   { title: "Talk (Instagram)", href: "https://www.instagram.com/p/CpELpU6JCpS/", tag: "talk", filters: ["Speaking"], ext: true },
   { title: "Talk (video)", href: "https://youtu.be/Xvr2fg2VcIA", tag: "talk", filters: ["Speaking"], ext: true },
   { title: "Search for True North", href: "https://www.linkedin.com/pulse/search-true-north-ardhra-s/", tag: "article", filters: ["Writing", "Article"], ext: true },
   { title: "Year in Warp", href: "https://www.linkedin.com/pulse/year-warp-ardhra-s/", tag: "article", filters: ["Writing", "Article"], ext: true },
   { title: "Making Software Intuitive Through Language", href: "https://www.linkedin.com/pulse/making-software-intuitive-through-language-microsoft-arihant-vaisraj-k4yzc/", tag: "article · co-authored", filters: ["Writing", "Article"], ext: true },
-  { title: "UW CommLead — profile", href: "https://commlead.uw.edu/2025/03/06/ardhra-sivasankaran/", tag: "feature", filters: ["Feature"], ext: true },
+  { title: "UW CommLead: profile", href: "https://commlead.uw.edu/2025/03/06/ardhra-sivasankaran/", tag: "feature", filters: ["Feature"], ext: true },
 ];
 
 const sections = [
@@ -80,11 +81,11 @@ const allTags = [...new Set(allRows.flatMap((r) => r.filters || []))].sort((a, b
 );
 const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
 ---
-<Base bg title="Work — Ardhra Sivasankaran">
+<Base bg bodyClass="work" title="Work — Ardhra Sivasankaran">
   <section class="work-intro">
     <div class="intro-head">
       <p class="kicker">The work</p>
-      <h1>What I've made<span class="cursor" aria-hidden="true"></span></h1>
+      <h1>What I've made.<span class="cursor" aria-hidden="true"></span></h1>
     </div>
     <div class="filter-bar">
       <button type="button" id="filter-clear" class="filter-clear" hidden>Clear</button>
@@ -110,7 +111,7 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
           <span class="label">{s.title}</span>
           <span class="arrow" aria-hidden="true">▸</span>
         </summary>
-        <p class="desc">{s.desc}</p>
+        <p class="desc" data-drawer-desc data-copy={s.desc} aria-label={s.desc}></p>
         <ul class="rows">
           {s.rows.map((r) => (
             <li data-tags={dataTags(r)}>
@@ -185,8 +186,39 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     .drawer[open] > summary .arrow { transform: rotate(90deg); }
 
     .desc {
-      margin: 0.1rem 0 0.9rem 2.25rem;
+      display: block;
+      min-height: 1.6em;
+      margin: 0.15rem 0 1rem 2.25rem;
       color: var(--green);
+    }
+    .desc.is-typing::after {
+      content: "";
+      width: 0.08em;
+      height: 0.9em;
+      background: var(--green);
+      animation: desc-caret 700ms steps(1) infinite;
+    }
+    :global(html[data-work-intro="tag"]) .desc {
+      display: inline-flex;
+      width: fit-content;
+      margin-left: 2.25rem;
+      padding: 0.3rem 0.65rem;
+      border: 1px solid rgba(79, 138, 61, 0.45);
+      border-radius: 999px;
+      background: var(--green-soft);
+    }
+    :global(html[data-work-intro="tag"]) .desc::before {
+      display: none;
+    }
+    :global(html[data-work-intro="aside"]) .desc {
+      width: fit-content;
+      margin: 0.15rem 0 1.1rem auto;
+      padding: 0.1rem 0 0.1rem 0.85rem;
+      border-left: 3px solid var(--green);
+      text-align: right;
+    }
+    :global(html[data-work-intro="aside"]) .desc::before {
+      display: none;
     }
     .subhead {
       margin: 1.4rem 0 0.4rem 2.25rem;
@@ -280,8 +312,16 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     }
     li[hidden], .group[hidden], .drawer[hidden] { display: none; }
 
+    @keyframes desc-caret {
+      50% { opacity: 0; }
+    }
+
     @media (max-width: 560px) {
       .desc, .subhead, .rows a { margin-left: 0; padding-left: 1.4rem; }
+      :global(html[data-work-intro="tag"]) .desc,
+      :global(html[data-work-intro="aside"]) .desc {
+        margin-left: 0;
+      }
       .work-intro { align-items: stretch; }
       .filter-bar { flex: 1 1 100%; gap: 0.5rem 0.75rem; }
       .dropdown { flex: 1 1 100%; }
@@ -291,6 +331,10 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
   </style>
 
   <script>
+    const introStyle = new URLSearchParams(window.location.search).get("intro");
+    document.documentElement.dataset.workIntro =
+      introStyle === "tag" || introStyle === "aside" ? introStyle : "rule";
+
     const dropdown = document.getElementById("tag-dropdown");
     const toggle = document.getElementById("dd-toggle");
     const menu = document.getElementById("dd-menu");
@@ -299,6 +343,47 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     const clearBtn = document.getElementById("filter-clear");
     const noResults = document.getElementById("no-results");
     const drawers = Array.from(document.querySelectorAll(".menu .drawer"));
+
+    function typeDescription(drawer) {
+      const description = drawer.querySelector("[data-drawer-desc]");
+      if (!description || description.dataset.typed === "true") return;
+
+      const copy = description.dataset.copy || "";
+      description.dataset.typed = "true";
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        description.textContent = copy;
+        return;
+      }
+
+      let character = 0;
+      let nextCharacterAt = performance.now();
+      description.classList.add("is-typing");
+      const typeNextCharacter = () => {
+        character += 1;
+        description.textContent = copy.slice(0, character);
+        if (character < copy.length) {
+          nextCharacterAt += copy[character - 1] === " " ? 30 : 52;
+          window.setTimeout(
+            typeNextCharacter,
+            Math.max(0, nextCharacterAt - performance.now()),
+          );
+        } else {
+          description.classList.remove("is-typing");
+        }
+      };
+      typeNextCharacter();
+    }
+
+    const initiallyOpenDrawer = drawers.find((drawer) => drawer.open);
+    if (initiallyOpenDrawer) {
+      window.setTimeout(() => typeDescription(initiallyOpenDrawer), 300);
+    }
+    drawers.forEach((drawer) => {
+      drawer.addEventListener("toggle", () => {
+        if (drawer.open) typeDescription(drawer);
+      });
+    });
 
     function openMenu() {
       menu.hidden = false;
@@ -374,4 +459,3 @@ const dataTags = (r) => (r.filters || []).map((t) => t.toLowerCase()).join("|");
     });
   </script>
 </Base>
-
