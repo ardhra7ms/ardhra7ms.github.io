@@ -6,10 +6,16 @@ import PeopleBloom from "../components/PeopleBloom.astro";
   <section class="hero">
     <p class="kicker"><span class="ink">Content Designer</span> → Content Strategist</p>
     <h1>
-      I make products talk the way <PeopleBloom sunflower /> do.
+      I make products talk the way <PeopleBloom sunflower repel /> do.
     </h1>
-    <p class="subtitle">
-      People are dynamic, and so is language. I'm on a quest to scale content design to elevate <span class="nowrap">AI-forward</span> product design.
+    <p
+      class="subtitle"
+      data-typewriter
+      data-copy="I'm on a quest to scale content systems for AI-forward product design."
+      aria-label="People are dynamic, and so is language. I'm on a quest to scale content systems for AI-forward product design."
+    >
+      <span class="subtitle-static">People are dynamic, and so is language.</span>{" "}
+      <span class="subtitle-typed" data-typewriter-output aria-hidden="true"></span>
     </p>
     <p class="muted lede">
       I'm a writer, artist, and lover of languages, trained in communications, digital media, and engineering. I build <span class="em" tabindex="0">content systems</span> that scale across complex product ecosystems by establishing <span class="em" tabindex="0">terminology</span>, defining <span class="em" tabindex="0">objects</span> and <span class="em" tabindex="0">relationships</span>, and mapping them to product truth.<span class="cursor" aria-hidden="true"></span>
@@ -17,21 +23,62 @@ import PeopleBloom from "../components/PeopleBloom.astro";
   </section>
 
   <section class="paths">
-    <a class="path" href="/story">
-      <span class="path-title">H<span class="o">o</span>w I see</span>
-      <span class="path-sub">The stories that shape me and how I make sense of the world.</span>
+    <a class="path" href="/story" data-index="01">
+      <span class="path-title">H<span class="coin-letter">o</span>w I see</span>
+      <span class="path-copy">
+        <span class="path-sub">The stories that shape me and how I make sense of the world.</span>
+        <span class="path-cta">story →</span>
+      </span>
     </a>
-    <a class="path" href="/work">
-      <span class="path-title">What I d<span class="o">o</span></span>
-      <span class="path-sub">Where work leads to passion and inspiration finds me.</span>
+    <a class="path" href="/work" data-index="02">
+      <span class="path-title">What I d<span class="coin-letter">o</span></span>
+      <span class="path-copy">
+        <span class="path-sub">Where work leads to passion and inspiration finds me.</span>
+        <span class="path-cta">work →</span>
+      </span>
     </a>
   </section>
 
   <p class="skills-note">
-    <svg class="fly" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="15" rx="3.2" ry="4.2"/><path d="M12 12C10 8 7 6 4 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M12 12C14 8 17 6 20 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>A person is a growing tree, and <a href="/skills">skills</a> guiding fireflies.
+    <span class="note-firefly" aria-hidden="true"><span class="note-glow"></span></span>A person is a growing tree, and <a href="/skills">skills</a> are guiding fireflies.
   </p>
 
   <script>
+    const requestedNavStyle = new URLSearchParams(window.location.search).get("nav");
+    const navStyle =
+      requestedNavStyle === "boxes" ||
+      requestedNavStyle === "branches" ||
+      requestedNavStyle === "editorial" ||
+      requestedNavStyle === "growth" ||
+      requestedNavStyle === "constellation" ||
+      requestedNavStyle === "sentences"
+        ? requestedNavStyle
+        : "constellation";
+    document.documentElement.dataset.homeNav = navStyle;
+    const containerStyle = new URLSearchParams(window.location.search).get("container");
+    document.documentElement.dataset.seesawContainer =
+      containerStyle === "pans" || containerStyle === "none"
+        ? containerStyle
+        : "placards";
+    const seesaw = document.querySelector<HTMLElement>(".paths");
+    if (navStyle === "constellation" && seesaw) {
+      const syncSeesawGeometry = () => {
+        const ballWidth = Number.parseFloat(
+          getComputedStyle(seesaw, "::after").width,
+        );
+        const ballRadius = ballWidth / 2;
+        const halfBeamRun = seesaw.clientWidth * 0.195;
+        const beamRise = Math.tan((19 * Math.PI) / 180) * halfBeamRun;
+
+        seesaw.style.setProperty("--ball-low", `${beamRise - ballRadius}px`);
+        seesaw.style.setProperty("--ball-high", `${-beamRise - ballRadius}px`);
+      };
+
+      syncSeesawGeometry();
+      new ResizeObserver(syncSeesawGeometry).observe(seesaw);
+      seesaw.classList.add("is-seesaw-active");
+    }
+
     const landingSun = document.querySelector<HTMLElement>(".landing-sun");
 
     if (landingSun) {
@@ -46,6 +93,111 @@ import PeopleBloom from "../components/PeopleBloom.astro";
 
       positionSunlight();
       window.addEventListener("resize", positionSunlight);
+    }
+
+    const typewriter = document.querySelector<HTMLElement>("[data-typewriter]");
+    const typewriterOutput = document.querySelector<HTMLElement>("[data-typewriter-output]");
+
+    if (typewriter && typewriterOutput && typewriter.dataset.typed !== "true") {
+      const finalCopy = typewriter.dataset.copy ?? "";
+      const prefix =
+        "I'm on a quest to scale content systems for ";
+      const firstDraft = `${prefix}product desi`;
+      const replacement = "AI-forward product design.";
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const rhythm = [0, 7, -3, 10, -5, 4];
+      const emphasizedTerms = Array.from(
+        document.querySelectorAll<HTMLElement>(".lede .em"),
+      );
+      const emphasizeTerm = (index = 0) => {
+        const term = emphasizedTerms[index];
+        if (!term) return;
+
+        term.classList.add("is-gently-active");
+        window.setTimeout(() => {
+          term.classList.remove("is-gently-active");
+        }, 1860);
+
+        window.setTimeout(() => {
+          const nextIndex = (index + 1) % emphasizedTerms.length;
+          if (nextIndex === 0) {
+            window.setTimeout(() => emphasizeTerm(0), 3000);
+          } else {
+            emphasizeTerm(nextIndex);
+          }
+        }, 2280);
+      };
+
+      typewriter.dataset.typed = "true";
+      typewriterOutput.classList.add("is-typing");
+
+      if (reducedMotion) {
+        typewriterOutput.textContent = finalCopy;
+        typewriterOutput.classList.remove("is-typing");
+      } else {
+        const characterDelay = (character: string, index: number) => {
+          if (character === ".") return 300;
+          if (character === ",") return 175;
+          if (character === " ") return 44;
+          return 78 + rhythm[index % rhythm.length];
+        };
+
+        const typeText = (
+          text: string,
+          onComplete: () => void,
+          startIndex = 0,
+        ) => {
+          let character = startIndex;
+          let nextCharacterAt = performance.now();
+
+          const typeNextCharacter = () => {
+            const nextCharacter = text[character];
+            character += 1;
+            typewriterOutput.textContent = text.slice(0, character);
+
+            if (character >= text.length) {
+              onComplete();
+              return;
+            }
+
+            nextCharacterAt += characterDelay(nextCharacter, character);
+            window.setTimeout(
+              typeNextCharacter,
+              Math.max(0, nextCharacterAt - performance.now()),
+            );
+          };
+
+          typeNextCharacter();
+        };
+
+        const deleteDraft = () => {
+          let text = firstDraft;
+
+          const deleteNextCharacter = () => {
+            text = text.slice(0, -1);
+            typewriterOutput.textContent = text;
+
+            if (text.length === prefix.length) {
+              window.setTimeout(
+                () => typeText(`${prefix}${replacement}`, () => {
+                  typewriterOutput.classList.remove("is-typing");
+                  window.setTimeout(() => emphasizeTerm(0), 650);
+                }, prefix.length),
+                240,
+              );
+              return;
+            }
+
+            window.setTimeout(deleteNextCharacter, 45);
+          };
+
+          window.setTimeout(deleteNextCharacter, 550);
+        };
+
+        window.setTimeout(() => {
+          typeText(firstDraft, deleteDraft);
+        }, 220);
+      }
     }
   </script>
 
@@ -69,13 +221,24 @@ import PeopleBloom from "../components/PeopleBloom.astro";
     }
 
     .hero { position: relative; margin-bottom: 4.5rem; }
-    .hero h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); margin: 0.5rem 0 1.25rem; line-height: 1.15; }
+    .hero h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); margin: 0.5rem 0 1.55rem; line-height: 1.15; }
     .subtitle {
+      min-height: 3.8rem;
       font-size: 1.2rem; font-weight: 400;
-      color: var(--ink); margin: 0 0 1.5rem; line-height: 1.55;
+      color: var(--ink); margin: 0 0 0.65rem; line-height: 1.55;
+    }
+    .subtitle-typed.is-typing::after {
+      content: "";
+      display: inline-block;
+      width: 0.08em;
+      height: 0.9em;
+      margin-left: 0.08em;
+      background: var(--red);
+      vertical-align: -0.08em;
+      animation: type-caret 700ms steps(1) infinite;
     }
     .subtitle .nowrap { white-space: nowrap; }
-    .lede { font-size: 0.95rem; line-height: 1.7; }
+    .lede { font-size: calc(0.95rem + 0.5px); line-height: 1.7; }
     .lede .em {
       position: relative;
       color: var(--red);
@@ -84,7 +247,8 @@ import PeopleBloom from "../components/PeopleBloom.astro";
     }
 
     .lede .em:hover,
-    .lede .em:focus-visible {
+    .lede .em:focus-visible,
+    .lede .em.is-gently-active {
       color: var(--red);
       font-style: italic;
     }
@@ -95,34 +259,542 @@ import PeopleBloom from "../components/PeopleBloom.astro";
       border-radius: 0.08em;
     }
 
-    .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink); border: 2px solid var(--ink); }
-    .path {
-      background: var(--paper); padding: 1.75rem 1.5rem; border: 0;
-      display: flex; flex-direction: column; gap: 0.4rem; min-height: 130px;
+    .paths {
+      --path-hover-bg: var(--green);
+      --path-hover-title: #ffffff;
+      --path-hover-copy: #ffe17a;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--ink);
+      border: 2px solid var(--ink);
     }
-    .path:hover { background: var(--ink); color: var(--paper); }
-    .path:hover .path-sub { color: var(--paper); }
-    .path:hover .path-title { color: var(--green-apple); }
-    .path-title { font-size: 1.05rem; font-weight: 700; }
-    .path-title .o { color: var(--green); }
-    .path:hover .path-title .o { color: var(--green-apple); }
-    .path-sub { color: var(--grey-600); font-size: 1.05rem; margin-top: auto; }
+    .path {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      min-height: 130px;
+      padding: 1.75rem 1.5rem;
+      border: 0;
+      background: var(--paper);
+      transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+    .path:hover {
+      background: var(--path-hover-bg);
+      color: var(--path-hover-title);
+    }
+    .path:hover .path-sub { color: var(--path-hover-copy); }
+    .path:hover .path-title { color: var(--path-hover-title); }
+    .path-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      perspective: 300px;
+    }
+    .path-title .coin-letter {
+      display: inline-block;
+      color: var(--green);
+      transform-origin: center;
+    }
+    .path:hover .coin-letter {
+      animation: coin-spin 1440ms cubic-bezier(0.3, 0.75, 0.3, 1);
+    }
+    .path-sub {
+      color: var(--grey-600);
+      font-size: calc(0.665rem - 0.35px);
+      margin-top: auto;
+    }
+    .path-copy {
+      display: grid;
+      margin-top: auto;
+    }
+    .path-copy > * {
+      grid-area: 1 / 1;
+    }
+    .path-cta {
+      display: none;
+    }
+
+    :global(html[data-home-nav="branches"]) .paths {
+      position: relative;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border: 0;
+      background: transparent;
+      padding-left: 2.6rem;
+    }
+    :global(html[data-home-nav="branches"]) .paths::before {
+      content: "";
+      position: absolute;
+      left: 0.8rem;
+      top: 0.8rem;
+      bottom: 0.8rem;
+      border-left: 2px solid var(--green);
+    }
+    :global(html[data-home-nav="branches"]) .path {
+      min-height: 0;
+      padding: 1.2rem 0.5rem 1.2rem 1rem;
+      border: 0;
+      border-bottom: 1px solid var(--grey-200);
+      background: transparent;
+    }
+    :global(html[data-home-nav="branches"]) .path::before {
+      content: "❧";
+      position: absolute;
+      left: -2.45rem;
+      top: 50%;
+      color: var(--green);
+      font-size: 1.45rem;
+      transform: translateY(-50%);
+    }
+    :global(html[data-home-nav="branches"]) .path:hover {
+      color: var(--ink);
+      background: transparent;
+      transform: translateX(0.45rem);
+    }
+    :global(html[data-home-nav="branches"]) .path:hover .path-title {
+      color: var(--ink);
+    }
+    :global(html[data-home-nav="branches"]) .path:hover .path-sub {
+      color: var(--green);
+    }
+
+    :global(html[data-home-nav="editorial"]) .paths {
+      gap: 2rem;
+      border: 0;
+      background: transparent;
+    }
+    :global(html[data-home-nav="editorial"]) .path {
+      min-height: 125px;
+      padding: 1rem 0 1.2rem;
+      border: 0;
+      border-top: 2px solid var(--green);
+      border-bottom: 1px solid var(--grey-200);
+      background: transparent;
+    }
+    :global(html[data-home-nav="editorial"]) .path::before {
+      content: attr(data-index);
+      color: var(--red);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+    }
+    :global(html[data-home-nav="editorial"]) .path:hover {
+      color: var(--ink);
+      background: transparent;
+      transform: translateY(-0.25rem);
+    }
+    :global(html[data-home-nav="editorial"]) .path:hover .path-title {
+      color: var(--ink);
+    }
+    :global(html[data-home-nav="editorial"]) .path:hover .path-sub {
+      color: var(--green);
+    }
+
+    :global(html[data-home-nav="growth"]) .paths {
+      position: relative;
+      gap: 3rem;
+      border: 0;
+      background: transparent;
+    }
+    :global(html[data-home-nav="growth"]) .paths::before {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 50%;
+      border-top: 1px solid var(--green);
+    }
+    :global(html[data-home-nav="growth"]) .path {
+      min-height: 130px;
+      padding: 1.25rem 1rem 1.25rem 4.8rem;
+      border: 0;
+      background: var(--paper);
+    }
+    :global(html[data-home-nav="growth"]) .path::before {
+      content: "";
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      width: 2.2rem;
+      height: 3rem;
+      border: 2px solid var(--green);
+      border-radius: 100% 0 100% 0;
+      background: var(--paper);
+      transform: translateY(-50%) rotate(-45deg);
+    }
+    :global(html[data-home-nav="growth"]) .path:nth-child(2)::before {
+      border-radius: 0 100% 0 100%;
+      transform: translateY(-50%) rotate(45deg);
+    }
+    :global(html[data-home-nav="growth"]) .path:hover {
+      color: var(--ink);
+      background: var(--paper);
+      transform: translateY(-0.2rem);
+    }
+    :global(html[data-home-nav="growth"]) .path:hover .path-title {
+      color: var(--ink);
+    }
+    :global(html[data-home-nav="growth"]) .path:hover .path-sub {
+      color: var(--green);
+    }
+
+    :global(html[data-home-nav="constellation"]) .paths {
+      position: relative;
+      grid-template-columns: 39% 39%;
+      justify-content: center;
+      gap: 0;
+      padding: 2.3rem 1rem 1.8rem;
+      border: 0;
+      background: transparent;
+    }
+    :global(html[data-home-nav="constellation"]) .paths::before {
+      content: "";
+      position: absolute;
+      left: 30.5%;
+      right: 30.5%;
+      top: 2.8rem;
+      border-top: 1px dashed var(--green);
+      transform-origin: center;
+      will-change: transform;
+    }
+    :global(html[data-home-nav="constellation"]) .path {
+      min-height: 120px;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 1.3rem 0.75rem;
+      border: 0;
+      background: transparent;
+      text-align: center;
+      transform-origin: center top;
+      will-change: transform;
+    }
+    :global(html[data-home-nav="constellation"]) .path-sub {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      bottom: calc(100% + 0.6rem);
+      width: min(20rem, 86%);
+      padding: 0.55rem 0.7rem;
+      border: 0;
+      border-radius: 10px;
+      background: var(--green-soft);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+      color: var(--green);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translate(-50%, 0.25rem);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+    :global(html[data-home-nav="constellation"]) .path-cta {
+      display: block;
+      color: var(--red);
+      width: fit-content;
+      margin: 0 auto;
+      border-bottom: 1px solid currentColor;
+      font-size: calc(0.66rem + 5px);
+      font-style: italic;
+      line-height: 1.15;
+      opacity: 1;
+    }
+    :global(html[data-home-nav="constellation"]) .path-copy {
+      margin-top: -0.2rem;
+    }
+    :global(html[data-home-nav="constellation"]) .path:hover .path-sub,
+    :global(html[data-home-nav="constellation"]) .path:focus-visible .path-sub {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+    :global(html[data-home-nav="constellation"]) .paths::after {
+      content: "";
+      position: absolute;
+      left: calc(30.5% - 0.35rem);
+      top: calc(2.8rem - 0.35rem);
+      width: 0.7rem;
+      height: 0.7rem;
+      border: 2px solid var(--red);
+      border-radius: 50%;
+      background: var(--paper);
+      will-change: left, transform, opacity;
+    }
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active::before {
+      animation: seesaw-rock 15150ms ease-in-out infinite;
+    }
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active::after {
+      animation: seesaw-ball 15150ms linear infinite;
+    }
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active .path:first-child {
+      animation: seesaw-left-label 15150ms ease-in-out infinite;
+    }
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active .path:nth-child(2) {
+      animation: seesaw-right-label 15150ms ease-in-out infinite;
+    }
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active:has(.path:hover)::before,
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active:has(.path:hover)::after,
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active:has(.path:hover) .path,
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active:focus-within::before,
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active:focus-within::after,
+    :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active:focus-within .path {
+      animation-play-state: paused;
+    }
+    :global(html[data-home-nav="constellation"]) .path:hover {
+      color: var(--ink);
+      background: transparent;
+      transform: scale(1.025);
+    }
+    :global(html[data-home-nav="constellation"]) .path:hover .path-title {
+      color: var(--ink);
+    }
+    :global(html[data-home-nav="constellation"]) .path:hover .path-sub {
+      color: var(--green);
+    }
+
+    :global(html[data-home-nav="constellation"][data-seesaw-container="pans"]) .path {
+      min-height: 88px;
+      padding: 0.8rem 0.65rem;
+      border-right: 1px solid var(--green);
+      border-bottom: 1px solid var(--green);
+      border-left: 1px solid var(--green);
+      background: var(--paper);
+    }
+    :global(html[data-home-nav="constellation"][data-seesaw-container="pans"]) .path::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      height: 1.05rem;
+      border-left: 1px solid var(--green);
+    }
+
+    :global(html[data-home-nav="constellation"][data-seesaw-container="placards"]) .path {
+      min-height: 88px;
+      padding: 0.8rem 0.65rem;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    :global(html[data-home-nav="constellation"][data-seesaw-container="placards"]) .path::before,
+    :global(html[data-home-nav="constellation"][data-seesaw-container="placards"]) .path::after {
+      display: none;
+    }
+
+    :global(html[data-home-nav="sentences"]) .paths {
+      grid-template-columns: 1fr;
+      gap: 0;
+      border: 0;
+      background: transparent;
+    }
+    :global(html[data-home-nav="sentences"]) .path {
+      display: grid;
+      grid-template-columns: minmax(8rem, 0.35fr) 1fr auto;
+      min-height: 0;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1.25rem 0.4rem;
+      border: 0;
+      border-bottom: 1px solid var(--grey-200);
+      background: transparent;
+    }
+    :global(html[data-home-nav="sentences"]) .path:first-child {
+      border-top: 1px solid var(--grey-200);
+    }
+    :global(html[data-home-nav="sentences"]) .path-title::after {
+      content: ":";
+      color: var(--red);
+    }
+    :global(html[data-home-nav="sentences"]) .path::after {
+      content: "↗";
+      color: var(--red);
+    }
+    :global(html[data-home-nav="sentences"]) .path:hover {
+      color: var(--ink);
+      background: var(--green-soft);
+      transform: none;
+    }
+    :global(html[data-home-nav="sentences"]) .path:hover .path-title {
+      color: var(--ink);
+    }
+    :global(html[data-home-nav="sentences"]) .path:hover .path-sub {
+      color: var(--grey-600);
+    }
+
+    @keyframes coin-spin {
+      0% { transform: rotateY(0deg); }
+      45% { transform: rotateY(170deg) scaleX(0.82); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    @keyframes seesaw-rock {
+      0% { transform: rotate(-19deg); }
+      10%, 50% { transform: rotate(19deg); }
+      60%, 100% { transform: rotate(-19deg); }
+    }
+
+    @keyframes seesaw-ball {
+      0% {
+        left: calc(30.5% - 0.35rem);
+        transform: translateY(var(--ball-low, 2.9rem)) rotate(-720deg);
+        animation-timing-function: ease-in-out;
+      }
+      10% {
+        left: calc(30.5% - 0.35rem);
+        transform: translateY(var(--ball-high, -3.6rem)) rotate(-720deg);
+        animation-timing-function: ease-in-out;
+      }
+      50% {
+        left: calc(69.5% - 0.35rem);
+        transform: translateY(var(--ball-low, 2.9rem)) rotate(0deg);
+        animation-timing-function: ease-in-out;
+      }
+      60% {
+        left: calc(69.5% - 0.35rem);
+        transform: translateY(var(--ball-high, -3.6rem)) rotate(0deg);
+        animation-timing-function: ease-in-out;
+      }
+      100% {
+        left: calc(30.5% - 0.35rem);
+        transform: translateY(var(--ball-low, 2.9rem)) rotate(-720deg);
+      }
+    }
+
+    @keyframes seesaw-left-label {
+      0% { transform: translateY(3.4rem); }
+      10%, 50% { transform: translateY(-3.4rem); }
+      60%, 100% { transform: translateY(3.4rem); }
+    }
+
+    @keyframes seesaw-right-label {
+      0% { transform: translateY(-3.4rem); }
+      10%, 50% { transform: translateY(3.4rem); }
+      60%, 100% { transform: translateY(-3.4rem); }
+    }
 
     @media (max-width: 640px) {
       .paths { grid-template-columns: 1fr; }
     }
 
     .skills-note {
-      margin-top: 1.5rem; text-align: left;
+      position: relative;
+      isolation: isolate;
+      margin: 1.5rem 0 0;
+      padding: 2.5rem 1rem 1rem;
+      text-align: center;
       color: var(--ink);
-      font-size: 1.05rem;
+      font-size: calc(1.05rem - 0.5px);
     }
-    .skills-note .fly {
-      width: 1.05em; height: 1.05em; display: inline-block;
-      color: var(--ink); fill: var(--ink);
-      margin-right: 0.4em; vertical-align: -0.18em;
+    .skills-note::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: var(--green-soft);
+      clip-path: polygon(
+        0 34%, 2% 20%, 3% 34%, 5% 14%, 6% 35%, 8% 24%, 10% 36%,
+        12% 18%, 14% 35%, 16% 12%, 18% 34%, 20% 22%, 23% 36%,
+        25% 15%, 27% 34%, 30% 20%, 32% 36%, 35% 13%, 37% 35%,
+        40% 22%, 43% 36%, 46% 16%, 48% 35%, 51% 21%, 54% 36%,
+        57% 14%, 60% 35%, 63% 20%, 66% 36%, 69% 12%, 72% 35%,
+        75% 23%, 78% 36%, 81% 15%, 84% 34%, 87% 20%, 90% 36%,
+        93% 13%, 96% 34%, 98% 21%, 100% 35%, 100% 100%, 0 100%
+      );
+      opacity: 0.58;
+    }
+    :global(body.home .site-foot) {
+      margin-top: 0;
+    }
+    .note-firefly {
+      position: relative;
+      display: inline-block;
+      width: 1.35em;
+      height: 1.05em;
+      margin-right: 0.42em;
+      vertical-align: -0.24em;
+      z-index: 2;
+      pointer-events: none;
+      animation: note-wander 12s ease-in-out infinite;
+    }
+
+    .note-glow {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green-apple);
+      box-shadow: 0 0 6px 2px rgba(143, 203, 94, 0.55);
+      transform: translate(-50%, -50%) rotate(-24deg);
+      animation: note-pulse 4.5s ease-in-out infinite;
+    }
+
+    .note-glow::before,
+    .note-glow::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 9px;
+      height: 12px;
+      border: 1px solid rgba(79, 138, 61, 0.62);
+      border-radius: 50%;
+      background: transparent;
+      transform-origin: 92% 60%;
+      animation: note-wing-left 1.8s ease-in-out infinite alternate;
+    }
+
+    .note-glow::after {
+      transform-origin: 8% 60%;
+      animation-name: note-wing-right;
+      animation-delay: -0.12s;
+    }
+
+    @keyframes note-wander {
+      0%, 100% { opacity: 0.9; transform: translate(0, 0) rotate(0deg); }
+      13% { opacity: 0.6; transform: translate(1rem, -1.45rem) rotate(18deg); }
+      28% { opacity: 1; transform: translate(2.65rem, 0.15rem) rotate(52deg); }
+      43% { opacity: 0.68; transform: translate(0.75rem, 1.75rem) rotate(86deg); }
+      59% { opacity: 1; transform: translate(-1.85rem, 0.75rem) rotate(118deg); }
+      74% { opacity: 0.62; transform: translate(-2.55rem, -1.15rem) rotate(150deg); }
+      88% { opacity: 1; transform: translate(-0.35rem, -2rem) rotate(180deg); }
+    }
+
+    @keyframes note-pulse {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes note-wing-left {
+      from { transform: translate(-95%, -55%) rotate(-21deg) scaleY(0.96); }
+      to { transform: translate(-95%, -55%) rotate(-28deg) scaleY(1.02); }
+    }
+
+    @keyframes note-wing-right {
+      from { transform: translate(-5%, -55%) rotate(21deg) scaleY(0.96); }
+      to { transform: translate(-5%, -55%) rotate(28deg) scaleY(1.02); }
+    }
+
+    @keyframes type-caret {
+      50% { opacity: 0; }
     }
     .skills-note a { color: var(--green); text-decoration: underline; border: 0; }
     .skills-note a:hover { color: var(--red); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .note-firefly,
+      .note-glow,
+      .note-glow::before,
+      .note-glow::after,
+      .subtitle-typed.is-typing::after,
+      .path:hover .coin-letter,
+      :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active::before,
+      :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active::after,
+      :global(html[data-home-nav="constellation"]) .paths.is-seesaw-active .path {
+        animation: none;
+      }
+    }
   </style>
 </Base>

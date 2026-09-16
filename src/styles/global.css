@@ -99,26 +99,39 @@ body.home { --wrap: 820px; }
 }
 
 body.home .page-bg {
-  background-size: 94% auto;
-  opacity: 0.74;
-  -webkit-mask-image: linear-gradient(to right,
-    transparent 0,
-    #000 5vw,
-    #000 calc(50% - var(--clearw) / 2 - var(--feather)),
-    transparent calc(50% - var(--clearw) / 2),
-    transparent calc(50% + var(--clearw) / 2),
-    #000 calc(50% + var(--clearw) / 2 + var(--feather)),
-    #000 calc(100% - 5vw),
-    transparent 100%);
-          mask-image: linear-gradient(to right,
-    transparent 0,
-    #000 5vw,
-    #000 calc(50% - var(--clearw) / 2 - var(--feather)),
-    transparent calc(50% - var(--clearw) / 2),
-    transparent calc(50% + var(--clearw) / 2),
-    #000 calc(50% + var(--clearw) / 2 + var(--feather)),
-    #000 calc(100% - 5vw),
-    transparent 100%);
+  overflow: hidden;
+  background: none;
+  opacity: 1;
+  filter: none;
+  -webkit-mask-image: none;
+          mask-image: none;
+}
+
+body.home .page-bg::before,
+body.home .page-bg::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(50% - var(--clearw) / 2);
+  background-image: url("/files/bg/flowers-original-red.png");
+  background-repeat: no-repeat;
+  opacity: 0.9;
+}
+
+body.home .page-bg::before {
+  left: 0;
+  background-position: top left;
+  background-size: auto 100%;
+}
+
+body.home .page-bg::after {
+  right: 0;
+  top: -2%;
+  bottom: 0;
+  background-position: right top;
+  background-size: auto 96%;
+  opacity: 0.84;
 }
 
 /* Phones have no side gutters, so the horizontal clear-zone would hide every
@@ -144,8 +157,7 @@ body.home .page-bg {
   }
 
   body.home .page-bg {
-    background-size: 100% auto;
-    opacity: 0.96;
+    opacity: 1;
     -webkit-mask-image: linear-gradient(to bottom,
       #000 0,
       #000 84px,
@@ -160,6 +172,16 @@ body.home .page-bg {
       transparent calc(100% - 175px),
       #000 calc(100% - 95px),
       #000 100%);
+  }
+
+  body.home .page-bg::before {
+    width: 100%;
+    background-size: 100% auto;
+    opacity: 0.9;
+  }
+
+  body.home .page-bg::after {
+    display: none;
   }
 }
 

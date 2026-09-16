@@ -1,5 +1,5 @@
 ---
-const { sunflower = false } = Astro.props;
+const { sunflower = false, autoPlay = false, repel = false } = Astro.props;
 const letters = [..."people"];
 const lifts = [-0.08, -0.22, -0.32, -0.2, 0.06, 0.18];
 const tilts = [-4, 3, -2, 3.5, -2.5, 4];
@@ -11,6 +11,8 @@ const tilts = [-4, 3, -2, 3.5, -2.5, 4];
   aria-label="Animate the word people"
   aria-pressed="false"
   data-people-bloom
+  data-auto-play={autoPlay ? "true" : undefined}
+  data-repel={repel ? "true" : undefined}
 >
   <span class="word" aria-hidden="true">
     {letters.map((letter, index) => (
@@ -54,15 +56,61 @@ const tilts = [-4, 3, -2, 3.5, -2.5, 4];
   const peopleBloomControls = document.querySelectorAll<HTMLButtonElement>("[data-people-bloom]");
 
   peopleBloomControls.forEach((control) => {
-    control.addEventListener("click", () => {
+    const setActive = (active: boolean) => {
+      control.classList.toggle("is-active", active);
+      control.setAttribute("aria-pressed", String(active));
+    };
+
+    control.onclick = () => {
       const willActivate = !control.classList.contains("is-active");
       peopleBloomControls.forEach((item) => {
         item.classList.remove("is-active");
         item.setAttribute("aria-pressed", "false");
       });
-      control.classList.toggle("is-active", willActivate);
-      control.setAttribute("aria-pressed", String(willActivate));
-    });
+      setActive(willActivate);
+    };
+
+    if (control.dataset.autoPlay === "true" && control.dataset.autoPlayed !== "true") {
+      control.dataset.autoPlayed = "true";
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          setActive(true);
+          window.setTimeout(() => {
+            setActive(false);
+          }, 750);
+        });
+      });
+    }
+
+    if (control.dataset.repel === "true") {
+      const letters = Array.from(control.querySelectorAll<HTMLElement>(".letter"));
+      const resetLetters = () => {
+        letters.forEach((letter) => {
+          letter.style.removeProperty("--repel-x");
+          letter.style.removeProperty("--repel-y");
+          letter.style.removeProperty("--repel-rotate");
+        });
+      };
+
+      control.onpointermove = (event) => {
+        letters.forEach((letter) => {
+          const bounds = letter.getBoundingClientRect();
+          const centerX = bounds.left + bounds.width / 2;
+          const centerY = bounds.top + bounds.height / 2;
+          const deltaX = centerX - event.clientX;
+          const deltaY = centerY - event.clientY;
+          const distance = Math.max(Math.hypot(deltaX, deltaY), 1);
+          const influence = Math.max(0, 1 - distance / 110);
+          const force = influence * 13;
+
+          letter.style.setProperty("--repel-x", `${(deltaX / distance) * force}px`);
+          letter.style.setProperty("--repel-y", `${(deltaY / distance) * force}px`);
+          letter.style.setProperty("--repel-rotate", `${(deltaX / distance) * influence * 5}deg`);
+        });
+      };
+      control.onpointerleave = resetLetters;
+      control.onblur = resetLetters;
+    }
   });
 
   document.addEventListener("click", (event) => {
@@ -114,6 +162,7 @@ const tilts = [-4, 3, -2, 3.5, -2.5, 4];
     height: 0.86em;
     margin-left: -0.05em;
     vertical-align: -0.23em;
+    animation: sunflower-bounce 5.2s ease-in-out infinite;
   }
 
   .landing-sun svg {
@@ -121,7 +170,7 @@ const tilts = [-4, 3, -2, 3.5, -2.5, 4];
     width: 100%;
     height: 100%;
     overflow: visible;
-    filter: drop-shadow(0 0 3px rgba(255, 170, 0, 0.62));
+    filter: brightness(0.95) drop-shadow(0 0 3px rgba(255, 170, 0, 0.5));
     transition: transform 500ms ease;
   }
 
@@ -130,13 +179,16 @@ const tilts = [-4, 3, -2, 3.5, -2.5, 4];
     opacity: 0.78;
   }
 
-  .people-bloom:hover .landing-sun svg,
+  .people-bloom:not([data-repel="true"]):hover .landing-sun svg,
   .people-bloom:focus-visible .landing-sun svg,
   .people-bloom.is-active .landing-sun svg {
     transform: rotate(8deg) scale(1.04);
   }
 
   .letter {
+    --repel-x: 0px;
+    --repel-y: 0px;
+    --repel-rotate: 0deg;
     transform-origin: center bottom;
     transition:
       color 250ms ease,
@@ -144,11 +196,28 @@ const tilts = [-4, 3, -2, 3.5, -2.5, 4];
     transition-delay: calc(var(--i) * 55ms);
   }
 
-  .people-bloom:hover .letter,
+  .people-bloom:not([data-repel="true"]):hover .letter,
   .people-bloom:focus-visible .letter,
   .people-bloom.is-active .letter {
     color: var(--red);
     transform: translateY(var(--lift)) rotate(var(--tilt));
+  }
+
+  .people-bloom[data-repel="true"] .letter {
+    transform: translate(var(--repel-x), var(--repel-y)) rotate(var(--repel-rotate));
+    transition: transform 120ms ease-out;
+    transition-delay: 0ms;
+  }
+
+  .people-bloom[data-repel="true"].is-active .letter {
+    transform: translateY(var(--lift)) rotate(var(--tilt));
+    transition: transform 280ms cubic-bezier(0.18, 0.9, 0.25, 1.3);
+    transition-delay: calc(var(--i) * 27.5ms);
+  }
+
+  @keyframes sunflower-bounce {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -0.035em; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -157,10 +226,15 @@ const tilts = [-4, 3, -2, 3.5, -2.5, 4];
       transition-delay: 0ms !important;
     }
 
-    .people-bloom:hover .letter,
+    .people-bloom:not([data-repel="true"]):hover .letter,
     .people-bloom:focus-visible .letter,
-    .people-bloom.is-active .letter {
+    .people-bloom.is-active .letter,
+    .people-bloom[data-repel="true"] .letter {
       transform: none;
+    }
+
+    .landing-sun {
+      animation: none;
     }
   }
 </style>
