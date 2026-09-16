@@ -48,11 +48,11 @@ const strengths = [
     </button>
 
     <ul class="fireflies" aria-label="Strengths">
-      {strengths.map((s) => (
+      {strengths.map((s, i) => (
         <li
           class:list={["firefly", { "flip-x": s.x > 60, "flip-y": s.y > 72 }]}
           tabindex="0"
-          style={`--x:${s.x}%; --y:${s.y}%; --mx:${s.mx}%; --my:${s.my}%; --angle:${s.angle}deg; --dx1:${s.dx1}px; --dy1:${s.dy1}px; --dx2:${s.dx2}px; --dy2:${s.dy2}px; --dur:${s.dur}s; --delay:${s.delay}s;`}
+          style={`--x:${s.x}%; --y:${s.y}%; --mx:${s.mx}%; --my:${s.my}%; --angle:${s.angle}deg; --dx1:${s.dx1}px; --dy1:${s.dy1}px; --dx2:${s.dx2}px; --dy2:${s.dy2}px; --dur:${s.dur}s; --delay:${s.delay}s; --intro-index:${i};`}
         >
           <span class="glow" aria-hidden="true"></span>
           <span class="label">{s.text}</span>
@@ -68,6 +68,19 @@ const strengths = [
   <script>
     const night = document.querySelector<HTMLElement>("[data-night-sky]");
     const moon = document.querySelector<HTMLButtonElement>("[data-moon]");
+    const introFireflies = Array.from(
+      document.querySelectorAll<HTMLElement>(".firefly"),
+    );
+    const introGlowBeat = 3600;
+
+    introFireflies.forEach((firefly, index) => {
+      window.setTimeout(() => {
+        firefly.classList.add("is-intro-glowing");
+        window.setTimeout(() => {
+          firefly.classList.remove("is-intro-glowing");
+        }, introGlowBeat);
+      }, index * introGlowBeat);
+    });
 
     if (night && moon) {
       const phaseNames = [
@@ -159,6 +172,16 @@ const strengths = [
       const restoreMoonlight = () => {
         night.classList.remove("moon-shadowed", "moon-brightened");
       };
+      let introActive = true;
+      const restoreMoonIfIdle = () => {
+        if (
+          !introActive &&
+          !moon.matches(":hover") &&
+          document.activeElement !== moon
+        ) {
+          restoreMoonlight();
+        }
+      };
 
       moonLight?.setAttribute("d", phasePaths[phase]);
       if (moonTip) moonTip.textContent = phaseTips[phase];
@@ -174,16 +197,24 @@ const strengths = [
               : "crescent";
       night.style.setProperty(
         "--phase-moonlight",
-        String(0.025 + (illumination / 100) * 0.07),
+        String(0.03 + (illumination / 100) * 0.084),
       );
       moon.setAttribute(
         "aria-label",
         `The Moon, shown as ${phaseNames[phase]}, approximately ${illumination}% illuminated`,
       );
-      moon.addEventListener("pointerenter", activateMoonlight);
-      moon.addEventListener("pointerleave", restoreMoonlight);
-      moon.addEventListener("focus", activateMoonlight);
-      moon.addEventListener("blur", restoreMoonlight);
+      moon.classList.add("is-intro-active");
+      activateMoonlight();
+      window.setTimeout(() => {
+        introActive = false;
+        moon.classList.remove("is-intro-active");
+        restoreMoonIfIdle();
+      }, 10_000);
+
+      moon.onpointerenter = activateMoonlight;
+      moon.onpointerleave = restoreMoonIfIdle;
+      moon.onfocus = activateMoonlight;
+      moon.onblur = restoreMoonIfIdle;
     }
   </script>
 
@@ -199,7 +230,7 @@ const strengths = [
       width: 100vw;
       min-height: clamp(1200px, 150svh, 1640px);
       overflow: hidden;
-      --moonlight: 0.018;
+      --moonlight: 0.0216;
       background:
         radial-gradient(120% 90% at 50% 10%, #16211a 0%, #0d130f 55%, #080b09 100%);
       border-top: 1px solid #223027;
@@ -222,7 +253,7 @@ const strengths = [
       z-index: 1;
       pointer-events: none;
       background:
-        radial-gradient(circle at 82% 11%, rgba(255, 255, 255, 0.75), transparent 25%),
+        radial-gradient(circle at 82% 11%, rgba(255, 255, 255, 0.75), transparent 30%),
         linear-gradient(rgba(238, 245, 255, 0.7), rgba(215, 228, 220, 0.35));
       opacity: var(--moonlight);
       mix-blend-mode: screen;
@@ -246,13 +277,14 @@ const strengths = [
       z-index: 6;
       top: 5.5%;
       right: 7%;
-      width: clamp(1.9rem, 4.5vw, 3rem);
+      width: clamp(2.28rem, 5.4vw, 3.6rem);
       aspect-ratio: 1;
       padding: 0;
       border: 0;
       border-radius: 50%;
       background: transparent;
       cursor: pointer;
+      animation: moon-bounce 5.2s ease-in-out infinite;
       transition: transform 700ms cubic-bezier(0.2, 0.8, 0.25, 1), filter 400ms ease;
     }
 
@@ -283,20 +315,23 @@ const strengths = [
     }
 
     .moon[data-dark="true"]:hover .moon-disc,
-    .moon[data-dark="true"]:focus-visible .moon-disc {
+    .moon[data-dark="true"]:focus-visible .moon-disc,
+    .moon[data-dark="true"].is-intro-active .moon-disc {
       filter: brightness(0.85);
       box-shadow: 0 0 12px rgba(127, 145, 136, 0.28);
     }
 
     .moon[data-dark="false"]:hover .moon-disc,
-    .moon[data-dark="false"]:focus-visible .moon-disc {
+    .moon[data-dark="false"]:focus-visible .moon-disc,
+    .moon[data-dark="false"].is-intro-active .moon-disc {
       filter: brightness(1.08);
       box-shadow: 0 0 16px rgba(245, 242, 220, 0.48);
     }
 
     .moon:hover,
-    .moon:focus-visible {
-      transform: translateY(-2px) scale(1.05);
+    .moon:focus-visible,
+    .moon.is-intro-active {
+      transform: scale(1.05);
     }
 
     .moon-tip {
@@ -343,7 +378,8 @@ const strengths = [
     }
 
     .moon:hover .moon-tip,
-    .moon:focus-visible .moon-tip {
+    .moon:focus-visible .moon-tip,
+    .moon.is-intro-active .moon-tip {
       opacity: 1;
       visibility: visible;
       transform: translate(0, -50%);
@@ -423,11 +459,19 @@ const strengths = [
       background: #c9f59a;
       box-shadow: 0 0 14px 5px rgba(143, 203, 94, 0.85);
     }
+    .firefly.is-intro-glowing .glow {
+      animation:
+        pulse calc(var(--dur, 18s) / 4) ease-in-out infinite,
+        intro-dot-glow 3600ms ease-in-out 1;
+    }
     .firefly:hover .label,
     .firefly:focus-visible .label {
       opacity: 1;
       color: #f0f8e8;
       text-shadow: 0 0 10px rgba(143, 203, 94, 0.5);
+    }
+    .firefly.is-intro-glowing .label {
+      animation: intro-label-glow 3600ms ease-in-out 1;
     }
     .firefly:focus-visible {
       outline: 2px solid var(--green-apple);
@@ -493,6 +537,28 @@ const strengths = [
       0%, 100% { opacity: 0.45; }
       50%      { opacity: 1; }
     }
+    @keyframes intro-dot-glow {
+      0%, 100% {
+        background: var(--green-apple);
+        box-shadow: 0 0 6px 2px rgba(143, 203, 94, 0.55);
+      }
+      50% {
+        background: #c9f59a;
+        box-shadow: 0 0 14px 5px rgba(143, 203, 94, 0.85);
+      }
+    }
+    @keyframes intro-label-glow {
+      0%, 100% {
+        opacity: 0.55;
+        color: #d8e6cc;
+        text-shadow: none;
+      }
+      50% {
+        opacity: 1;
+        color: #f0f8e8;
+        text-shadow: 0 0 10px rgba(143, 203, 94, 0.5);
+      }
+    }
     @keyframes wing-left {
       from { transform: translate(-95%, -55%) rotate(-21deg) scaleY(0.96); }
       to   { transform: translate(-95%, -55%) rotate(-28deg) scaleY(1.02); }
@@ -501,6 +567,10 @@ const strengths = [
       from { transform: translate(-5%, -55%) rotate(21deg) scaleY(0.96); }
       to   { transform: translate(-5%, -55%) rotate(28deg) scaleY(1.02); }
     }
+    @keyframes moon-bounce {
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -3px; }
+    }
     @media (prefers-reduced-motion: reduce) {
       .firefly { animation: none; }
       .glow { animation: none; opacity: 1; transform: rotate(var(--angle, 0deg)); }
@@ -508,7 +578,7 @@ const strengths = [
       .glow::after { animation: none; }
       .glow::before { transform: translate(-95%, -55%) rotate(-24deg); }
       .glow::after { transform: translate(-5%, -55%) rotate(24deg); }
-      .moon { transition: none; }
+      .moon { animation: none; transition: none; }
       .label { opacity: 1; }   /* all strengths readable when motion is off */
     }
 
@@ -522,7 +592,8 @@ const strengths = [
       }
 
       .moon:hover .moon-tip,
-      .moon:focus-visible .moon-tip {
+      .moon:focus-visible .moon-tip,
+      .moon.is-intro-active .moon-tip {
         transform: translateY(0);
       }
     }
