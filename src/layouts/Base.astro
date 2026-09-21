@@ -40,11 +40,34 @@ const { title = "Ardhra Sivasankaran", description = "Content designer & strateg
           </nav>
         </div>
         <p class="colophon">
-          <span>The interactions on this site were built with AI under my direction.</span>
-          <span>Thanks to the many designers whose work has shaped it, wittingly or not.</span>
-          <span>Everything else here is drawn and written by me.</span>
+          <span>Drawn and written by hand. Coded by AI, under my direction.</span>
+          <span>Built upon the works of designers and engineers. All rights reserved.</span>
         </p>
       </footer>
     </div>
+    <script>
+      const isEditableTarget = (target: EventTarget | null) =>
+        target instanceof HTMLElement &&
+        (target.matches("input, textarea") || target.isContentEditable);
+
+      for (const eventName of ["copy", "cut"]) {
+        document.addEventListener(eventName, (event) => {
+          if (!isEditableTarget(event.target)) event.preventDefault();
+        });
+      }
+
+      document.addEventListener("dragstart", (event) => {
+        if (!isEditableTarget(event.target)) event.preventDefault();
+      });
+
+      document.addEventListener("contextmenu", (event) => {
+        if (
+          event.target instanceof Element &&
+          event.target.closest("img, svg")
+        ) {
+          event.preventDefault();
+        }
+      });
+    </script>
   </body>
 </html>

@@ -40,7 +40,18 @@ body {
   line-height: 1.6;
   letter-spacing: -0.01em;
   cursor: url("/files/flower-cursor.svg") 13 13, auto;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
+
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+img, svg { -webkit-user-drag: none; }
 
 a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--grey-200); }
 a:hover { color: var(--red); border-color: var(--red); }
@@ -120,20 +131,31 @@ body.home .page-bg::after {
   background-image: url("/files/bg/flowers-original-red.png");
   background-repeat: no-repeat;
   opacity: 0.9;
+  will-change: transform;
 }
 
 body.home .page-bg::before {
   left: 0;
-  background-position: top left;
-  background-size: auto 100%;
+  top: -3%;
+  bottom: -3%;
+  background-position: left bottom;
+  background-size: auto 108%;
+  transform: scaleY(-1) rotate(1.5deg);
+  transform-origin: left center;
+  -webkit-mask-image: linear-gradient(to right, #000 0 95%, transparent 100%);
+          mask-image: linear-gradient(to right, #000 0 95%, transparent 100%);
 }
 
 body.home .page-bg::after {
   right: 0;
-  top: -2%;
-  bottom: 0;
-  background-position: right top;
-  background-size: auto 96%;
+  top: -5%;
+  bottom: -5%;
+  background-position: right center;
+  background-size: auto 102%;
+  transform: rotate(-1.75deg);
+  transform-origin: right center;
+  -webkit-mask-image: linear-gradient(to left, #000 0 95%, transparent 100%);
+          mask-image: linear-gradient(to left, #000 0 95%, transparent 100%);
   opacity: 0.84;
 }
 
@@ -166,24 +188,32 @@ body.work .page-bg::after {
 body.story .page-bg::before,
 body.work .page-bg::before {
   left: 0;
-  top: 0;
-  bottom: 0;
+  top: -5%;
+  bottom: -5%;
   background-image:
     url("/files/bg/flowers-original.png"),
     linear-gradient(to right, var(--red-soft) 0 68%, rgba(255, 236, 235, 0.55) 86%, transparent 100%);
-  background-position: left center, center;
-  background-size: auto 108%, 100% 100%;
+  background-position: left 62%, center;
+  background-size: auto 116%, 100% 100%;
+  transform: scaleY(-1) rotate(1.25deg);
+  transform-origin: left center;
+  -webkit-mask-image: linear-gradient(to right, #000 0 95%, transparent 100%);
+          mask-image: linear-gradient(to right, #000 0 95%, transparent 100%);
   opacity: 0.88;
 }
 
 body.story .page-bg::after,
 body.work .page-bg::after {
   right: 0;
-  top: 0;
-  bottom: 0;
+  top: -4%;
+  bottom: -4%;
   background-image: url("/files/bg/flowers-original.png");
-  background-position: right center;
-  background-size: auto 108%;
+  background-position: right 36%;
+  background-size: auto 101%;
+  transform: rotate(-1.5deg);
+  transform-origin: right center;
+  -webkit-mask-image: linear-gradient(to left, #000 0 95%, transparent 100%);
+          mask-image: linear-gradient(to left, #000 0 95%, transparent 100%);
   opacity: 0.82;
 }
 
@@ -230,6 +260,10 @@ body.work .page-bg::after {
   body.home .page-bg::before {
     width: 100%;
     background-size: 100% auto;
+    background-position: top center;
+    transform: none;
+    -webkit-mask-image: none;
+            mask-image: none;
     opacity: 0.9;
   }
 
@@ -262,6 +296,9 @@ body.work .page-bg::after {
     width: 100%;
     background-position: top center;
     background-size: 100% auto;
+    transform: none;
+    -webkit-mask-image: none;
+            mask-image: none;
     opacity: 0.88;
   }
 
@@ -307,17 +344,12 @@ body.work .page-bg::after {
 }
 .colophon {
   margin: 0.5rem 0 0; width: 100%; color: var(--grey-600); line-height: 1.6;
-  display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem;
 }
-.colophon span { flex: 1 1 0; min-width: 200px; }
-.colophon span:nth-child(2) { text-align: center; }
+.colophon span { min-width: 0; text-wrap: balance; }
 .colophon span:last-child { text-align: right; }
 @media (max-width: 640px) {
-  .colophon { display: block; }
-  .colophon span,
-  .colophon span:nth-child(2),
-  .colophon span:last-child { display: inline; text-align: left; min-width: 0; }
-  .colophon span + span::before { content: " "; }
+  .colophon { gap: 1rem; }
 }
 .foot-links { display: inline-flex; gap: 0.9rem; align-items: center; }
 .foot-links a { color: var(--green); display: inline-flex; transition: transform 0.15s ease, opacity 0.15s ease; opacity: 0.85; }
