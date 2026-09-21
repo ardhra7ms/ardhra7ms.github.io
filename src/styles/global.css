@@ -26,14 +26,17 @@
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+}
 
 body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-mono);
-  font-size: 17px;
+  font-size: 16.5px;
   line-height: 1.6;
   letter-spacing: -0.01em;
   cursor: url("/files/flower-cursor.svg") 13 13, auto;
@@ -113,7 +116,7 @@ body.home .page-bg::after {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: calc(50% - var(--clearw) / 2);
+  width: calc(50% - var(--clearw) / 2 + 1.5rem);
   background-image: url("/files/bg/flowers-original-red.png");
   background-repeat: no-repeat;
   opacity: 0.9;
@@ -280,8 +283,8 @@ body.work .page-bg::after {
 /* site header */
 .site-head {
   display: flex; justify-content: space-between; align-items: baseline;
-  padding: 1.5rem 0; border-bottom: 2px solid var(--ink);
-  margin-bottom: 3rem;
+  padding: 1.25rem 0; border-bottom: 2px solid var(--ink);
+  margin-bottom: 2.5rem;
 }
 .site-head .mark { font-weight: 700; font-size: 1rem; letter-spacing: 0; border: 0; }
 .mark-flower { width: 0.8em; height: 0.8em; display: inline-block; vertical-align: middle; transform: translateY(-0.1em); margin-left: 0.06em; }
@@ -295,7 +298,7 @@ body.work .page-bg::after {
 
 /* footer */
 .site-foot {
-  margin-top: 5rem; padding: 2rem 0 3rem; border-top: 1px solid var(--grey-200);
+  margin-top: 4rem; padding: 1.5rem 0 2.25rem; border-top: 1px solid var(--grey-200);
   font-size: 0.8rem; color: var(--grey-600);
   display: flex; flex-direction: column; gap: 1.1rem;
 }
@@ -352,10 +355,25 @@ body.dark .mark-flower .center { fill: #0d130f; }
 
 /* small screens: tighten gutters and stack the footer */
 @media (max-width: 560px) {
+  body {
+    font-size: 14.9px;
+    line-height: 1.58;
+  }
   .wrap { padding: 0 1rem; }
+  .site-head {
+    align-items: center;
+    margin-bottom: 1.65rem;
+    padding: 0.85rem 0;
+  }
+  .site-head .mark { font-size: 0.95rem; }
   .site-nav { display: flex; gap: 0.8rem; }
-  .site-nav a { margin-left: 0; }
-  .site-foot { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .site-nav a { margin-left: 0; font-size: 0.8rem; }
+  .site-foot {
+    margin-top: 2.75rem;
+    padding: 1.25rem 0 1.6rem;
+    gap: 0.75rem;
+  }
+  .foot-row { align-items: flex-start; }
 }
 
 /* Responsive Canva / video embeds */

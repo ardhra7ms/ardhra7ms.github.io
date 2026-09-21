@@ -219,8 +219,8 @@ const strengths = [
   </script>
 
   <style>
-    .skills-intro { margin-bottom: 2rem; }
-    .skills-intro h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); margin: 0.5rem 0 1rem; }
+    .skills-intro { margin-bottom: 1.65rem; }
+    .skills-intro h1 { font-size: clamp(calc(1.8rem - 0.5px), calc(4.5vw - 0.5px), calc(3rem - 0.5px)); margin: 0.5rem 0 0.8rem; }
 
     /* Full-bleed night canvas inside the centred wrap */
     .night {
@@ -228,7 +228,7 @@ const strengths = [
       left: 50%; right: 50%;
       margin-left: -50vw; margin-right: -50vw;
       width: 100vw;
-      min-height: clamp(1200px, 150svh, 1640px);
+      min-height: clamp(1040px, 132svh, 1440px);
       overflow: hidden;
       --moonlight: 0.0216;
       background:
@@ -447,7 +447,7 @@ const strengths = [
 
     .label {
       color: #d8e6cc;
-      font-size: 0.9rem;
+      font-size: calc(0.9rem - 0.5px);
       letter-spacing: 0.02em;
       white-space: nowrap;
       opacity: 0.55;
@@ -599,15 +599,31 @@ const strengths = [
     }
 
     @media (max-width: 640px) {
-      .label { font-size: 0.82rem; }
-      .night { min-height: max(1450px, 180svh); }
+      .skills-intro { margin-bottom: 1.2rem; }
+      .skills-intro h1 {
+        font-size: clamp(calc(1.7rem - 0.5px), calc(8vw - 0.5px), calc(2.2rem - 0.5px));
+        margin-bottom: 0.65rem;
+      }
+      .label { font-size: calc(0.78rem - 0.5px); }
+      .night { min-height: max(1050px, 130svh); }
       .moon { top: 3.5%; right: 5%; }
+      .moon-tip,
+      .moon[data-tip-group="half"] .moon-tip,
+      .moon[data-tip-group="gibbous"] .moon-tip,
+      .moon[data-tip-group="full"] .moon-tip {
+        width: min(28ch, calc(100vw - 4rem));
+      }
       /* Phone-tuned positions keep each firefly's whole label on-screen
          (centre-anchored, so nothing clips off either edge). */
       .firefly { left: var(--mx); top: var(--my); }
       /* Centre cards under the dot so they never overflow a narrow screen. */
       .card,
-      .firefly.flip-x .card { left: 50%; right: auto; width: 200px; margin-left: -100px; }
+      .firefly.flip-x .card {
+        left: 50%;
+        right: auto;
+        width: min(200px, calc(100vw - 2rem));
+        margin-left: max(-100px, calc(-50vw + 1rem));
+      }
     }
   </style>
 </Base>
