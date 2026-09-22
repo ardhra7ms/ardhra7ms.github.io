@@ -113,6 +113,8 @@ body.home { --wrap: 820px; }
 }
 
 body.home .page-bg {
+  position: fixed;
+  height: 100vh;
   overflow: hidden;
   background: none;
   opacity: 1;
@@ -335,6 +337,9 @@ body.work .page-bg::after {
 
 /* footer */
 .site-foot {
+  width: min(820px, 100%);
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 4rem; padding: 1.5rem 0 2.25rem; border-top: 1px solid var(--grey-200);
   font-size: 0.8rem; color: var(--grey-600);
   display: flex; flex-direction: column; gap: 1.1rem;
